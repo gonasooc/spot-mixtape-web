@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+@import "@fontsource-variable/outfit/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
+/*
+  Design tokens mirror the spotMixtape app (src/constants/Colors.ts + tailwind.config.js).
+  Dark "record shop" base, electric-lime accent, muted record-label violet.
+*/
+@theme {
+  --color-ink: #0b0d0a;
+  --color-ink-raised: #10130f;
+  --color-ink-deep: #070806;
+  --color-surface: #171a15;
+  --color-surface-raised: #1e221b;
+  --color-surface-pressed: #252a21;
+
+  --color-acid: #c9f55d;
+  --color-acid-strong: #d7ff75;
+  --color-acid-muted: #263019;
+  --color-violet: #9e83cf;
+
+  --color-paper: #f3f5ec;
+  --color-paper-deep: #e4e7dd;
+  --color-dim: #aab0a2;
+  --color-muted: #777d72;
+  --color-line: #343a30;
+  --color-line-strong: #4a5243;
+
+  --color-danger: #ff7770;
+  --color-warn: #f0c76a;
+
+  --font-sans:
+    "Outfit Variable", "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    overflow-x: clip;
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+
+    /* Korean wraps between 어절, never inside one. Latin still breaks if a
+       single token (an email, a URL) would otherwise overflow. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* Film grain, matching the app's tactile "digital vinyl" texture. */
+  body::before {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background-color: var(--color-acid);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-acid);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* Recording bars: mirrors the candle-style waveform used on sound cards. */
+@keyframes bar-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.bar-pulse {
+  transform-origin: center;
+  animation: bar-pulse 1.9s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.rise {
+  animation: rise 620ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  body::before,
+  .no-print {
+    display: none !important;
+  }
+}
