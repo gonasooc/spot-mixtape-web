@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: "/", label: "소개" },
   { to: "/privacy", label: "개인정보처리방침" },
   { to: "/terms", label: "이용약관" },
-  { to: "/account-deletion", label: "계정 삭제" },
 ];
 
 function SiteHeader() {
@@ -65,7 +64,7 @@ function SiteHeader() {
 
 function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-ink px-5 py-10 font-mono text-xs leading-relaxed text-muted sm:px-8">
+    <footer className="border-t border-line bg-ink px-5 py-10 font-mono text-xs leading-[1.95] text-muted sm:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-1.5">
           <span className="font-bold text-paper">{site.appName}</span>

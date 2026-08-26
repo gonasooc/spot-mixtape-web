@@ -10,9 +10,10 @@
 
 - [x] Vite 7 + React 19 + Tailwind v4 + pnpm 스캐폴드, 모바일 퍼스트 레이아웃
 - [x] 앱의 `Colors.ts`·`tailwind.config.js` 팔레트를 `src/styles.css`의 `@theme`로 이식
-- [x] 랜딩, 개인정보처리방침, 이용약관, 계정 삭제, 404 페이지 한국어 작성
+- [x] 랜딩, 개인정보처리방침, 이용약관, 404 페이지 한국어 작성
 - [x] 전 라우트 정적 프리렌더 — JS 없이도 전문 열람 가능, 이후 hydrate
 - [x] `/privacy`, `/privacy/`, `/privacy.html` 3형태 모두 200 (호스트 무관)
+- [x] 2026-08-26 미니멀 개편 — 랜딩 7→4섹션 축약, 법률 문서 히어로 제거(제목+시행일+목차만), 계정 삭제 페이지를 개인정보처리방침 8장으로 통합. `/account-deletion` 3형태는 meta refresh 스텁으로 `/privacy#account-deletion`에 리다이렉트하므로 앱·스토어 URL은 그대로 유효하다. `html`의 `scroll-behavior: smooth`가 Chrome에서 목차 앵커 스크롤을 전부 무효화하던 결함을 발견해 인스턴트 스크롤로 교체했다.
 - [x] Outfit·JetBrains Mono self-host — 외부 CDN 요청 0건
 - [x] 한국어 `word-break: keep-all`, 322~1452px 가로 오버플로 0건
 - [x] 콘솔 에러 0, hydration 불일치 0, 클라이언트 라우팅 시 meta·canonical 갱신
@@ -72,7 +73,7 @@
 
 - [ ] `pnpm config:check` exit 0
 - [ ] `pnpm build` 경고 없음
-- [ ] 4개 페이지 본문·푸터에 `REQUIRED`, `example.com`, `YYYY-MM-DD`가 보이지 않음
+- [ ] 3개 페이지 본문·푸터에 `REQUIRED`, `example.com`, `YYYY-MM-DD`가 보이지 않음
 
 ## 3. 국내 개인정보 보호법 대응 — REVIEW → AGENT
 
@@ -164,7 +165,7 @@ curl -sI "https://<origin>/privacy" | grep -i "content-security-policy\|x-frame-
 | --- | --- | --- |
 | `privacy` | `/privacy.html` | `dist/privacy.html` |
 | `terms` | `/terms.html` | `dist/terms.html` |
-| `accountDeletion` | `/account-deletion.html` | `dist/account-deletion.html` |
+| `accountDeletion` | `/account-deletion.html` | `dist/account-deletion.html` — `/privacy#account-deletion`로 리다이렉트하는 스텁 |
 | `support` | `/` | `dist/index.html` |
 
 `getLegalPageUrl()`은 origin을 검증한다. HTTPS여야 하고, 경로·쿼리·프래그먼트·인증정보가 없어야 하며, `localhost`·`.test`·`example.com` 호스트는 거부한다. `publicOrigin`을 정할 때 이 조건을 만족시켜야 한다.
@@ -180,7 +181,7 @@ curl -sI "https://<origin>/privacy" | grep -i "content-security-policy\|x-frame-
 
 ## 6. 스토어 URL 매핑 — OWNER
 
-이 사이트는 확장자 유무 양쪽을 모두 제공하므로 RELEASE_RUNBOOK에 적힌 `.html` URL도 그대로 동작한다. 신규 입력 시에는 확장자 없는 형태를 쓴다.
+이 사이트는 확장자 유무 양쪽을 모두 제공하므로 RELEASE_RUNBOOK에 적힌 `.html` URL도 그대로 동작한다. 신규 입력 시에는 확장자 없는 형태를 쓴다. `/account-deletion`은 개인정보처리방침의 계정 삭제 장(`/privacy#account-deletion`)으로 즉시 리다이렉트되며, 심사관도 해당 장에 바로 도착한다.
 
 | 입력란 | URL |
 | --- | --- |

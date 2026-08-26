@@ -13,7 +13,7 @@ export const routes: RouteMeta[] = [
     path: "/",
     title: "spotMixtape — 장소 기반 사운드 아카이브",
     description:
-      "그때 그곳의 10초를 소리로 남긴다. 위치와 사진을 담은 사운드 카드를 모아 나만의 믹스테이프로 다시 듣는 iOS·Android 앱.",
+      "그때 그곳의 10초를 소리로 남깁니다. 위치와 사진을 담은 사운드 카드를 모아 나만의 믹스테이프로 다시 듣는 iOS·Android 앱입니다.",
     themeColor: "#0B0D0A",
     indexable: true,
   },
@@ -31,14 +31,6 @@ export const routes: RouteMeta[] = [
     description:
       "spotMixtape 서비스 이용 조건, 계정과 콘텐츠에 대한 책임, 녹음 시 지켜야 할 사항과 금지 행위를 안내합니다.",
     themeColor: "#F3F5EC",
-    indexable: true,
-  },
-  {
-    path: "/account-deletion",
-    title: "계정 삭제 · spotMixtape",
-    description:
-      "앱 안에서 즉시 삭제하거나, 앱을 지운 뒤에도 이메일로 spotMixtape 계정과 저장된 데이터의 삭제를 요청하는 방법을 안내합니다.",
-    themeColor: "#C9F55D",
     indexable: true,
   },
   {

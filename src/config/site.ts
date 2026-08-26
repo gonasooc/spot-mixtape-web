@@ -2,9 +2,8 @@
  * Single source of truth for every legally significant value on this site.
  *
  * Values marked REQUIRED are placeholders. Replace them and have the result
- * reviewed before deploying — the privacy policy, terms, and account-deletion
- * pages all render straight from here. `pnpm run config:check` lists anything
- * still unresolved.
+ * reviewed before deploying — the privacy policy and terms pages render
+ * straight from here. `pnpm run config:check` lists anything still unresolved.
  */
 export const site = {
   appName: "spotMixtape",
@@ -31,10 +30,10 @@ export const site = {
 
   /** REQUIRED: 현재 Supabase 요금제의 백업·로그 보관 기간을 정확히 기재 */
   backupRetention:
-    "REQUIRED: 현재 Supabase 요금제를 확인한 뒤 백업과 로그의 정확한 보관 기간을 기재한다.",
+    "REQUIRED: 현재 Supabase 요금제를 확인한 뒤 백업과 로그의 정확한 보관 기간을 기재해 주십시오.",
   /** REQUIRED: 삭제 후 잔존 데이터가 있다면 근거와 기간을, 없다면 없다는 사실을 기재 */
   deletionRetention:
-    "REQUIRED: 법령상 보존 의무나 공급자 백업으로 남는 데이터가 있다면 그 항목과 정확한 기간을 기재하고, 없다면 앱 콘텐츠를 의도적으로 보관하지 않는다는 사실을 기재한다.",
+    "REQUIRED: 법령상 보존 의무나 공급자 백업으로 남는 데이터가 있다면 그 항목과 정확한 기간을, 없다면 앱 콘텐츠를 의도적으로 보관하지 않는다는 사실을 기재해 주십시오.",
   /** 계정 삭제 요청 처리 목표 기한 (일) */
   deletionSlaDays: 30,
 

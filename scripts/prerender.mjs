@@ -87,6 +87,45 @@ for (const meta of routes) {
   }
 }
 
+/**
+ * The app hardcodes /account-deletion.html and the store consoles accept the
+ * same URL, so the path must keep resolving after the standalone page merged
+ * into the privacy policy. A meta refresh needs no script or style, so the
+ * stub passes the site's CSP untouched.
+ */
+const REDIRECTS = [
+  {
+    from: "/account-deletion",
+    to: "/privacy#account-deletion",
+    title: "계정 삭제 · spotMixtape",
+    label: "개인정보처리방침의 계정 삭제 항목으로 이동합니다.",
+  },
+];
+
+for (const redirect of REDIRECTS) {
+  const html = `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0;url=${redirect.to}" />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href="${site.publicOrigin}${redirect.to.split("#")[0]}" />
+    <title>${escapeAttribute(redirect.title)}</title>
+  </head>
+  <body>
+    <p><a href="${redirect.to}">${redirect.label}</a></p>
+  </body>
+</html>
+`;
+
+  for (const outputPath of outputPathsFor(redirect.from)) {
+    mkdirSync(dirname(outputPath), { recursive: true });
+    writeFileSync(outputPath, html, "utf8");
+    written += 1;
+  }
+}
+
 const indexable = routes.filter((route) => route.indexable);
 
 writeFileSync(

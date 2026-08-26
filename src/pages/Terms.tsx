@@ -22,25 +22,11 @@ const SECTIONS: PolicySectionMeta[] = [
 
 export function Terms() {
   return (
-    <PolicyLayout
-      eyebrow={`이용약관 / 시행일 ${site.effectiveDate}`}
-      title={
-        <>
-          순간을 기록하되,
-          <br />그 안의 사람을 존중할 것.
-        </>
-      }
-      lede={
-        <>
-          이 약관은 {site.legalEntity}가 운영하는 {site.appName}의 이용 조건을
-          정합니다.
-        </>
-      }
-      sections={SECTIONS}
-    >
+    <PolicyLayout title="이용약관" sections={SECTIONS}>
       <PolicySection id="agreement" index={1} title="약관의 적용">
         <p>
-          계정을 만들거나 {site.appName}을 이용하면 이 약관과{" "}
+          이 약관은 {site.legalEntity}가 운영하는 {site.appName}의 이용 조건을
+          정합니다. 계정을 만들거나 {site.appName}을 이용하면 이 약관과{" "}
           <Link to="/privacy">개인정보처리방침</Link>에 동의한 것으로 봅니다.
           동의하지 않는다면 서비스를 이용하지 마십시오. 앱 마켓 사업자의 약관이
           함께 적용될 수 있습니다.
@@ -59,7 +45,7 @@ export function Terms() {
       </PolicySection>
 
       <PolicySection id="recording" index={3} title="책임 있는 녹음">
-        <PolicyNote heading="마이크는 주변 사람의 목소리도 담습니다." accent>
+        <PolicyNote heading="마이크는 주변 사람의 목소리도 담습니다.">
           <p className="m-0">
             사적인 대화는 녹음하지 마십시오. 다른 사람의 음성, 모습, 사적인
             공간을 녹음하거나 보관하거나 공유하기 전에 반드시 허락을 받으십시오.
@@ -122,9 +108,12 @@ export function Terms() {
         </p>
         <p>
           이용자는 앱 설정에서 계정을 삭제하거나{" "}
-          <Link to="/account-deletion">웹의 계정 삭제 안내</Link>를 통해 삭제를
-          요청할 수 있습니다. 삭제는 영구적이며, 이용자가 이미 내보냈거나
-          백업했거나 {site.appName} 밖에서 공유한 사본까지 제거하지는 않습니다.
+          <Link to="/privacy#account-deletion">
+            개인정보처리방침의 계정 삭제 안내
+          </Link>
+          를 통해 삭제를 요청할 수 있습니다. 삭제는 영구적이며, 이용자가 이미
+          내보냈거나 백업했거나 {site.appName} 밖에서 공유한 사본까지 제거하지는
+          않습니다.
         </p>
       </PolicySection>
 
