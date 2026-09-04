@@ -20,8 +20,11 @@ export const site = {
   postalAddress: "REQUIRED 사업장 주소",
   /** REQUIRED: 실제 수신 가능한 지원 이메일 */
   supportEmail: "support@example.com",
-  /** REQUIRED: 이 사이트가 배포될 HTTPS origin (끝에 / 없이) */
-  publicOrigin: "https://example.com",
+  /**
+   * 이 사이트가 배포될 HTTPS base URL. 끝에 / 를 붙이지 않는다.
+   * GitHub Pages project page처럼 하위 경로로 배포하면 그 경로까지 포함한다.
+   */
+  publicOrigin: "https://gonasooc.github.io/spot-mixtape-web",
   /** REQUIRED: 문서 시행일 (YYYY-MM-DD) */
   effectiveDate: "YYYY-MM-DD",
 

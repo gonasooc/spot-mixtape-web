@@ -18,9 +18,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = resolve(ROOT, "dist");
 const SSR_DIST = resolve(ROOT, "dist-ssr");
 
-const { findUnresolvedConfigKeys, render, routes, site } = await import(
-  pathToFileURL(resolve(SSR_DIST, "entry-server.js")).href
-);
+const { findUnresolvedConfigKeys, render, routes, site, withBasePath } =
+  await import(pathToFileURL(resolve(SSR_DIST, "entry-server.js")).href);
 
 const template = readFileSync(resolve(DIST, "index.html"), "utf8");
 
@@ -88,10 +87,11 @@ for (const meta of routes) {
 }
 
 /**
- * The app hardcodes /account-deletion.html and the store consoles accept the
+ * The app hardcodes account-deletion.html and the store consoles accept the
  * same URL, so the path must keep resolving after the standalone page merged
  * into the privacy policy. A meta refresh needs no script or style, so the
- * stub passes the site's CSP untouched.
+ * stub passes the site's CSP untouched. The target is resolved by the browser
+ * rather than the router, so it carries the deployment sub-path itself.
  */
 const REDIRECTS = [
   {
@@ -103,18 +103,19 @@ const REDIRECTS = [
 ];
 
 for (const redirect of REDIRECTS) {
+  const target = withBasePath(redirect.to);
   const html = `<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content="0;url=${redirect.to}" />
+    <meta http-equiv="refresh" content="0;url=${target}" />
     <meta name="robots" content="noindex,follow" />
     <link rel="canonical" href="${site.publicOrigin}${redirect.to.split("#")[0]}" />
     <title>${escapeAttribute(redirect.title)}</title>
   </head>
   <body>
-    <p><a href="${redirect.to}">${redirect.label}</a></p>
+    <p><a href="${target}">${redirect.label}</a></p>
   </body>
 </html>
 `;
