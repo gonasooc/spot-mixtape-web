@@ -39,18 +39,20 @@
 
   --radius-card: 1.25rem;
 
-  /* Tailwind's per-size line-heights scaled by 1.2 for airier Korean text. */
+  /* Body sizes (xs–lg) keep airy leading for Korean prose. Every size from xl
+     up is display type here — headings only — so leading tightens as the type
+     grows, instead of every step inheriting the same loose ratio. */
   --text-xs--line-height: 1.6;
   --text-sm--line-height: 1.71;
   --text-base--line-height: 1.8;
-  --text-lg--line-height: 1.87;
-  --text-xl--line-height: 1.68;
-  --text-2xl--line-height: 1.6;
-  --text-3xl--line-height: 1.44;
-  --text-4xl--line-height: 1.33;
-  --text-5xl--line-height: 1.2;
-  --text-6xl--line-height: 1.2;
-  --text-7xl--line-height: 1.2;
+  --text-lg--line-height: 1.78;
+  --text-xl--line-height: 1.5;
+  --text-2xl--line-height: 1.4;
+  --text-3xl--line-height: 1.34;
+  --text-4xl--line-height: 1.26;
+  --text-5xl--line-height: 1.18;
+  --text-6xl--line-height: 1.14;
+  --text-7xl--line-height: 1.1;
 }
 
 @layer base {
@@ -69,7 +71,8 @@
     color: var(--color-paper);
     font-family: var(--font-sans);
     font-size: 1rem;
-    line-height: 2.04;
+    /* Matches --text-base--line-height so inherited text and text-base agree. */
+    line-height: 1.8;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 
@@ -100,6 +103,11 @@
     outline-offset: 3px;
   }
 
+  /* Acid on the light sections is all but invisible; keep the ring readable. */
+  :where(.bg-paper, .bg-paper-deep, .bg-acid) :focus-visible {
+    outline-color: var(--color-ink);
+  }
+
   h1,
   h2,
   h3,
@@ -107,7 +115,7 @@
     text-wrap: balance;
     font-weight: 600;
     letter-spacing: -0.03em;
-    line-height: 1.34;
+    line-height: 1.3;
   }
 
   p {

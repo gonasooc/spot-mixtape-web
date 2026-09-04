@@ -32,8 +32,8 @@ function StoreActions() {
 
   if (!hasStoreLinks) {
     return (
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <span className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-acid/40 bg-acid/10 px-5 font-mono text-xs font-bold tracking-wide text-acid">
+      <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <span className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-acid/40 bg-acid/10 px-6 font-mono text-[0.8125rem] font-bold tracking-wide text-acid">
           <span aria-hidden="true" className="size-2 rounded-full bg-acid" />
           iOS · Android 출시 준비 중
         </span>
@@ -45,7 +45,7 @@ function StoreActions() {
   }
 
   return (
-    <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+    <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
       {site.appStoreUrl && (
         <ButtonAnchor href={site.appStoreUrl}>App Store에서 받기</ButtonAnchor>
       )}
@@ -60,13 +60,13 @@ function StoreActions() {
 
 function FieldCard() {
   return (
-    <div className="relative w-full max-w-md rotate-[1.5deg] rounded-sm border border-acid/40 bg-ink-raised bg-linear-[145deg] from-acid/10 to-transparent to-50% p-5 shadow-[0_28px_90px_rgb(0_0_0/40%)] sm:rotate-[2.5deg] sm:p-7">
+    <div className="relative w-full max-w-[calc(100%-0.75rem)] rotate-[1.5deg] rounded-sm sm:max-w-md border border-acid/40 bg-ink-raised bg-linear-[145deg] from-acid/10 to-transparent to-50% p-5 shadow-[0_28px_90px_rgb(0_0_0/40%)] sm:rotate-[2.5deg] sm:p-7">
       <span
         aria-hidden="true"
         className="absolute -right-3 -bottom-3 top-3 left-3 -z-10 border border-line"
       />
 
-      <div className="flex items-center justify-between gap-4 font-mono text-[0.6rem] tracking-widest text-muted">
+      <div className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] tracking-widest text-muted">
         <span>FIELD NOTE / 001</span>
         <span className="inline-flex items-center gap-1.5 text-acid">
           <span
@@ -90,7 +90,7 @@ function FieldCard() {
           { term: "접근", value: "서명" },
         ].map((item) => (
           <div key={item.term} className="border-l border-line pl-3">
-            <dt className="font-mono text-[0.55rem] tracking-widest text-muted uppercase">
+            <dt className="font-mono text-[0.625rem] tracking-widest text-muted uppercase">
               {item.term}
             </dt>
             <dd className="m-0 font-mono text-sm">{item.value}</dd>
@@ -113,7 +113,7 @@ export function Landing() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div className="rise">
             <Eyebrow>Sound archive for places</Eyebrow>
-            <h1 className="text-[2.6rem] leading-[1.26] sm:text-6xl lg:text-7xl">
+            <h1 className="text-[2.6rem]/[1.2] sm:text-6xl lg:text-7xl">
               그때 그곳의 소리를
               <br />
               <em className="not-italic text-acid">다시 꺼내 듣습니다.</em>
@@ -126,7 +126,7 @@ export function Landing() {
             <StoreActions />
           </div>
 
-          <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-start lg:justify-end">
             <FieldCard />
           </div>
         </div>
@@ -146,7 +146,7 @@ export function Landing() {
             <article key={item.step} className="border-t-2 border-acid pt-5">
               <span className="eyebrow text-muted">{item.step}</span>
               <h3 className="mt-3 mb-2 text-2xl">{item.title}</h3>
-              <p className="m-0 text-sm text-dim">{item.body}</p>
+              <p className="m-0 text-sm text-dim lg:text-[0.9375rem]/[1.75]">{item.body}</p>
             </article>
           ))}
         </div>
@@ -189,7 +189,7 @@ export function Landing() {
             <h2 className="max-w-[14ch] text-3xl sm:text-5xl">
               사람이 직접 답합니다.
             </h2>
-            <p className="mt-4 mb-0 max-w-lg text-sm text-ink/70">
+            <p className="mt-4 mb-0 max-w-lg text-[0.9375rem]/[1.75] text-ink/70">
               제품 문의도, 개인정보와 계정 삭제 요청도 같은 주소로 받습니다.
             </p>
           </div>

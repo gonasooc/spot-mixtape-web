@@ -13,7 +13,7 @@ const NAV_ITEMS = [
 function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-ink/85 backdrop-blur-md no-print">
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8 sm:py-4">
+      <div className="mx-auto flex max-w-6xl flex-col gap-0.5 px-5 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8 sm:py-4">
         <Link
           to="/"
           className="inline-flex w-fit items-center gap-2.5 font-mono text-sm font-bold tracking-tight text-paper no-underline"
@@ -31,7 +31,7 @@ function SiteHeader() {
                   end={item.to === "/"}
                   className={({ isActive }) =>
                     [
-                      "group relative inline-flex min-h-11 items-center whitespace-nowrap font-mono text-xs tracking-wide no-underline transition-colors",
+                      "group relative inline-flex min-h-11 items-center whitespace-nowrap font-mono text-[0.8125rem] tracking-wide no-underline transition-colors",
                       isActive
                         ? "text-paper"
                         : "text-muted hover:text-paper",

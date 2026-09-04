@@ -36,7 +36,7 @@ export function PolicyLayout({ title, sections, children }: PolicyLayoutProps) {
                   href={`#${section.id}`}
                   className="flex min-h-10 items-center gap-2.5 text-sm text-ink/60 no-underline transition-colors hover:text-ink"
                 >
-                  <span className="font-mono text-[0.65rem] text-[#667a17]">
+                  <span className="font-mono text-[0.6875rem] text-[#667a17]">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   {section.title}
@@ -71,7 +71,7 @@ export function PolicySection({
         </span>
         {title}
       </h2>
-      <div className="flex flex-col gap-4 text-[0.95rem] text-ink/75 sm:text-base [&_a]:font-bold [&_a]:text-ink [&_a]:underline [&_a]:underline-offset-4">
+      <div className="flex flex-col gap-5 text-[0.95rem]/[1.8] text-ink/75 sm:text-base [&_a]:font-bold [&_a]:text-ink [&_a]:underline [&_a]:underline-offset-4">
         {children}
       </div>
     </section>
@@ -80,7 +80,7 @@ export function PolicySection({
 
 export function PolicyList({ items }: { items: ReactNode[] }) {
   return (
-    <ul className="my-0 list-disc space-y-2.5 pl-5 marker:text-[#708d00]">
+    <ul className="my-0 list-disc space-y-3 pl-5 marker:text-[#708d00]">
       {items.map((item, index) => (
         <li key={index}>{item}</li>
       ))}
@@ -96,8 +96,8 @@ export function PolicyNote({
   children: ReactNode;
 }) {
   return (
-    <aside className="my-1 border border-ink/15 bg-paper-deep px-5 py-4">
-      <strong className="mb-1.5 block text-ink">{heading}</strong>
+    <aside className="my-2 border border-ink/15 bg-paper-deep px-5 py-4">
+      <strong className="mb-2 block text-ink">{heading}</strong>
       <div className="text-ink/75">{children}</div>
     </aside>
   );
@@ -128,7 +128,7 @@ export function PolicyTable({
               <th
                 key={cell}
                 scope="col"
-                className="border-r border-b border-ink/15 bg-paper-deep p-3 text-left font-mono text-[0.65rem] tracking-wide uppercase last:border-r-0"
+                className="border-r border-b border-ink/15 bg-paper-deep px-3.5 py-3 text-left font-mono text-[0.6875rem] tracking-wide uppercase last:border-r-0"
               >
                 {cell}
               </th>
@@ -141,7 +141,7 @@ export function PolicyTable({
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="border-r border-b border-ink/15 p-3 align-top text-ink/75 first:font-bold first:text-ink last:border-r-0 [tr:last-child_&]:border-b-0"
+                  className="border-r border-b border-ink/15 px-3.5 py-3 align-top text-ink/75 first:font-bold first:text-ink last:border-r-0 [tr:last-child_&]:border-b-0"
                 >
                   {cell}
                 </td>
@@ -164,7 +164,7 @@ export function ContactList({
       {entries.map((entry) => (
         <div
           key={entry.term}
-          className="grid gap-1 border-b border-ink/15 py-3 sm:grid-cols-[10rem_1fr] sm:gap-4"
+          className="grid gap-1 border-b border-ink/15 py-3 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:items-baseline sm:gap-4"
         >
           <dt className="font-mono text-xs font-bold tracking-wide uppercase">
             {entry.term}

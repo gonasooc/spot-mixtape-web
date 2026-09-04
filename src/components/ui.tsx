@@ -11,7 +11,7 @@ const TONE_CLASSES: Record<ButtonTone, string> = {
 };
 
 const BUTTON_BASE =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 py-3 text-center font-mono text-xs font-bold tracking-wide no-underline transition-[background-color,color,border-color,transform] duration-150 hover:-translate-y-0.5";
+  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-mono text-[0.8125rem] font-bold tracking-wide no-underline transition-[background-color,color,border-color,transform] duration-150 hover:-translate-y-0.5";
 
 interface ActionProps {
   tone?: ButtonTone;
