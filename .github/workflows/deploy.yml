@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      allow_placeholders:
+        description: >-
+          Publish even though src/config/site.ts still has REQUIRED values.
+          For checking the Pages plumbing only — never for a URL filed with a
+          store or written into the privacy policy.
+        type: boolean
+        default: false
+
+# GITHUB_TOKEN needs id-token for the Pages deployment's OIDC exchange.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than publishing a half-built site.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The privacy policy and terms render straight from site.ts, so a
+      # placeholder here would publish "REQUIRED 사업자 상호" as legal text.
+      - name: Check legal config
+        if: ${{ inputs.allow_placeholders != true }}
+        run: pnpm run config:check
+
+      - run: pnpm run build
+
+      # The app hardcodes these paths and the store consoles are filed with
+      # them, so a build that silently stops emitting one must not deploy.
+      - name: Verify required pages exist
+        run: |
+          for page in index.html privacy.html terms.html account-deletion.html; do
+            test -f "dist/$page" || { echo "missing dist/$page"; exit 1; }
+          done
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
