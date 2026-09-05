@@ -10,14 +10,18 @@ export const site = {
   appTagline: "장소 기반 사운드 아카이브",
   appIdentifier: "com.gonasoo.spotmixtape",
 
-  /** REQUIRED: 서비스를 운영하는 법인 또는 개인사업자 상호 */
-  legalEntity: "REQUIRED 사업자 상호",
+  /** 서비스를 운영하는 법인, 개인사업자 상호 또는 개인 운영자 본명 */
+  legalEntity: "최관수",
   /** REQUIRED: 앱스토어·구글플레이에 노출되는 개발자명 */
   developerName: "REQUIRED 스토어 개발자명",
   /** 개인정보 보호책임자 이름 또는 담당 부서 */
   privacyOfficer: "최관수",
-  /** REQUIRED: 서면 문의를 받을 주소 */
-  postalAddress: "REQUIRED 사업장 주소",
+  /**
+   * 서면 문의를 받을 주소. 사업장이 없어 공개할 주소가 없으면 null로 두면
+   * 방침의 주소 항목과 약관의 우편 안내가 함께 빠지고 이메일만 남는다.
+   * 우편 주소 없이 이메일 연락처만으로 충분한지는 법률 검토 대상이다.
+   */
+  postalAddress: null as string | null,
   /** 실제 수신 가능한 지원 이메일. 계정 삭제 요청도 이 주소로 받는다. */
   supportEmail: "spotmixtape.contact@gmail.com",
   /**
