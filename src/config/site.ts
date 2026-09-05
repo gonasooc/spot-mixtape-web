@@ -14,12 +14,12 @@ export const site = {
   legalEntity: "REQUIRED 사업자 상호",
   /** REQUIRED: 앱스토어·구글플레이에 노출되는 개발자명 */
   developerName: "REQUIRED 스토어 개발자명",
-  /** REQUIRED: 개인정보 보호책임자 이름 또는 담당 부서 */
-  privacyOfficer: "REQUIRED 개인정보 보호책임자",
+  /** 개인정보 보호책임자 이름 또는 담당 부서 */
+  privacyOfficer: "최관수",
   /** REQUIRED: 서면 문의를 받을 주소 */
   postalAddress: "REQUIRED 사업장 주소",
-  /** REQUIRED: 실제 수신 가능한 지원 이메일 */
-  supportEmail: "support@example.com",
+  /** 실제 수신 가능한 지원 이메일. 계정 삭제 요청도 이 주소로 받는다. */
+  supportEmail: "spotmixtape.contact@gmail.com",
   /**
    * 이 사이트가 배포될 HTTPS base URL. 끝에 / 를 붙이지 않는다.
    * GitHub Pages project page처럼 하위 경로로 배포하면 그 경로까지 포함한다.
