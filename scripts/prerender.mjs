@@ -141,9 +141,13 @@ ${indexable
   "utf8",
 );
 
+// Nothing indexable means the legal text is still placeholder, so the whole
+// site asks crawlers to stay out rather than advertising a sitemap.
 writeFileSync(
   resolve(DIST, "robots.txt"),
-  `User-agent: *\nAllow: /\n\nSitemap: ${site.publicOrigin}/sitemap.xml\n`,
+  indexable.length > 0
+    ? `User-agent: *\nAllow: /\n\nSitemap: ${site.publicOrigin}/sitemap.xml\n`
+    : `User-agent: *\nDisallow: /\n`,
   "utf8",
 );
 

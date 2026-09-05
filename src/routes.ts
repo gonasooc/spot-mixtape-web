@@ -1,3 +1,5 @@
+import { findUnresolvedConfigKeys } from "./config/site";
+
 export interface RouteMeta {
   /** Router path and, for the prerenderer, the output directory. */
   path: string;
@@ -8,7 +10,7 @@ export interface RouteMeta {
   indexable: boolean;
 }
 
-export const routes: RouteMeta[] = [
+const routeDefinitions: RouteMeta[] = [
   {
     path: "/",
     title: "spotMixtape — 장소 기반 사운드 아카이브",
@@ -41,6 +43,19 @@ export const routes: RouteMeta[] = [
     indexable: false,
   },
 ];
+
+/**
+ * A policy page still naming "REQUIRED 사업자 상호" must not be indexed: a
+ * search result outlives the deploy that produced it, and the site can be
+ * published with placeholders on purpose to check the deployment plumbing.
+ * Filling in src/config/site.ts turns indexing back on by itself.
+ */
+const legalTextIsPublishable = findUnresolvedConfigKeys().length === 0;
+
+export const routes: RouteMeta[] = routeDefinitions.map((route) => ({
+  ...route,
+  indexable: route.indexable && legalTextIsPublishable,
+}));
 
 export function findRouteMeta(pathname: string): RouteMeta {
   const normalized =
