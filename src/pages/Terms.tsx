@@ -38,7 +38,7 @@ export function Terms() {
           items={[
             "Google 또는 Apple을 통해 본인이 접근 권한을 가진 계정으로 로그인해야 합니다.",
             "로그인 계정과 기기를 합리적인 수준으로 안전하게 관리해야 합니다.",
-            "무단 접근이 의심되면 즉시 회사에 알려야 합니다.",
+            "무단 접근이 의심되면 즉시 운영자에게 알려야 합니다.",
             "타인을 사칭하거나 이용 제한을 회피할 목적으로 계정을 만들 수 없습니다.",
           ]}
         />
@@ -62,7 +62,7 @@ export function Terms() {
       <PolicySection id="content" index={4} title="이용자의 콘텐츠">
         <p>
           이용자가 만든 녹음, 사진, 메모 등 콘텐츠에 대한 권리는 이용자에게
-          그대로 남습니다. 이용자는 회사에 대해, 요청한 서비스 기능을 제공하고
+          그대로 남습니다. 이용자는 운영자에게, 요청한 서비스 기능을 제공하고
           보호하고 문제를 해결하고 개선하는 데 필요한 범위에서만 해당 콘텐츠를
           저장·복제·변환·전송할 수 있는 제한적 이용 권한을 부여합니다.
         </p>
@@ -88,7 +88,7 @@ export function Terms() {
 
       <PolicySection id="service" index={6} title="서비스 제공과 계정 삭제">
         <p>
-          회사는 보안, 안정성, 법령 준수 또는 서비스 운영을 위해 필요한 경우
+          운영자는 보안, 안정성, 법령 준수 또는 서비스 운영을 위해 필요한 경우
           기능을 유지·변경·중단할 수 있습니다. 중요한 변경은 적절한 채널로
           안내하고자 하지만, 서비스가 중단 없이 제공된다고 보장하지는 않습니다.
         </p>
@@ -135,9 +135,9 @@ export function Terms() {
           제한하지 않습니다.
         </p>
         <p>
-          문의는 {site.developerName}{" "}
-          <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a> 또는{" "}
-          {site.postalAddress}로 보내 주십시오.
+          문의는 {site.developerName}에게 보내 주십시오. 이메일{" "}
+          <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>
+          {site.postalAddress ? <>, 우편 {site.postalAddress}</> : null}.
         </p>
       </PolicySection>
     </PolicyLayout>

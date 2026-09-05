@@ -59,8 +59,8 @@ export function Privacy() {
     <PolicyLayout title="개인정보처리방침" sections={SECTIONS}>
       <PolicySection id="controller" index={1} title="처리 주체">
         <p>
-          이 방침은 {site.legalEntity}(이하 “회사”)가 {site.appName}을 제공하면서
-          개인정보를 어떻게 처리하는지 설명합니다. 회사는 스토어에{" "}
+          이 방침은 {site.legalEntity}(이하 “운영자”)가 {site.appName}을 제공하면서
+          개인정보를 어떻게 처리하는지 설명합니다. 운영자는 스토어에{" "}
           {site.developerName}(으)로 표기됩니다.
         </p>
         <ContactList
@@ -72,7 +72,9 @@ export function Privacy() {
                 <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>
               ),
             },
-            { term: "주소", detail: site.postalAddress },
+            ...(site.postalAddress
+              ? [{ term: "주소", detail: site.postalAddress }]
+              : []),
           ]}
         />
       </PolicySection>
@@ -109,8 +111,8 @@ export function Privacy() {
 
       <PolicySection id="providers" index={4} title="처리 위탁과 처리 지역">
         <p>
-          서비스 운영에 필요한 범위로 한정해 아래 사업자를 이용합니다. 회사는
-          개인정보를 판매하지 않습니다. 각 사업자는 자체 약관과 회사의 서비스
+          서비스 운영에 필요한 범위로 한정해 아래 사업자를 이용합니다. 운영자는
+          개인정보를 판매하지 않습니다. 각 사업자는 자체 약관과 운영자의 서비스
           설정에 따라 정보를 처리할 수 있습니다.
         </p>
 
@@ -165,8 +167,8 @@ export function Privacy() {
           <p className="m-0">
             백엔드 호스팅 리전이 대한민국 밖({site.supabaseRegion})에 있으므로
             계정 정보와 업로드된 콘텐츠가 국외에서 처리될 수 있습니다. 적용되는
-            이전 보호조치에 대해 더 알고 싶다면 서비스를 이용하기 전에 회사로
-            문의해 주십시오.
+            이전 보호조치에 대해 더 알고 싶다면 서비스를 이용하기 전에
+            운영자에게 문의해 주십시오.
           </p>
         </PolicyNote>
       </PolicySection>
@@ -204,7 +206,7 @@ export function Privacy() {
         />
         <p>
           완벽하게 안전한 시스템은 없습니다. 계정이나 콘텐츠가 노출되었다고
-          의심되면 즉시 회사로 알려 주십시오.
+          의심되면 즉시 운영자에게 알려 주십시오.
         </p>
       </PolicySection>
 
@@ -215,7 +217,7 @@ export function Privacy() {
             "앱 안에서 개별 사운드 카드를 수정하거나 삭제할 수 있습니다.",
             "저장된 아카이브를 지우지 않고 로그아웃할 수 있습니다.",
             "설정에서 계정 전체를 삭제하거나, 이메일로 삭제를 요청할 수 있습니다.",
-            "회사에 연락해 개인정보의 열람, 정정, 처리정지, 삭제를 요구할 수 있습니다.",
+            "운영자에게 연락해 개인정보의 열람, 정정, 처리정지, 삭제를 요구할 수 있습니다.",
           ]}
         />
       </PolicySection>
