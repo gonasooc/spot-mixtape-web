@@ -18,8 +18,12 @@ export const site = {
 
   /** 서비스를 운영하는 법인, 개인사업자 상호 또는 개인 운영자 본명 */
   legalEntity: "최관수",
-  /** REQUIRED: 앱스토어·구글플레이에 노출되는 개발자명 */
-  developerName: "REQUIRED 스토어 개발자명",
+  /**
+   * 스토어에 노출되는 개발자명. Play Console 계정 세부정보의 개발자 이름과
+   * 글자 그대로 같아야 한다. App Store 판매자명이 다르게 확정되면 이 값을
+   * 쓰는 문구를 스토어별로 나눈다.
+   */
+  developerName: "gonasooc",
   /** 개인정보 보호책임자 이름 또는 담당 부서 */
   privacyOfficer: "최관수",
   /**
