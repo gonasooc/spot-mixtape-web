@@ -5,11 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
+      # GitHub labels the checkbox with this description and never shows the
+      # input name, so the name has to lead it.
       allow_placeholders:
-        description: >-
-          Publish even though src/config/site.ts still has REQUIRED values.
-          For checking the Pages plumbing only — never for a URL filed with a
-          store or written into the privacy policy.
+        description: "allow_placeholders: publish with REQUIRED values still in site.ts (plumbing check only)"
         type: boolean
         default: false
 
