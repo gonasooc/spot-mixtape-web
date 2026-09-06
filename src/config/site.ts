@@ -5,12 +5,6 @@
  * reviewed before deploying — the privacy policy and terms pages render
  * straight from here. `pnpm run config:check` lists anything still unresolved.
  */
-/**
- * 운영자가 직접 만든 백업 사본을 보관하는 최대 일수. 아래 두 고지 문구가
- * 이 값을 함께 쓰므로, 실제 파기 주기를 바꾸면 여기만 고치면 된다.
- */
-const BACKUP_RETENTION_DAYS = 30;
-
 export const site = {
   appName: "spotMixtape",
   appTagline: "장소 기반 사운드 아카이브",
@@ -39,22 +33,21 @@ export const site = {
    * GitHub Pages project page처럼 하위 경로로 배포하면 그 경로까지 포함한다.
    */
   publicOrigin: "https://gonasooc.github.io/spot-mixtape-web",
-  /** REQUIRED: 문서 시행일 (YYYY-MM-DD) */
-  effectiveDate: "YYYY-MM-DD",
+  /** 문서 시행일. 내용을 고쳐 공개할 때마다 갱신한다. */
+  effectiveDate: "2026-09-06",
 
   governingLaw: "대한민국 법률",
   supabaseRegion: "인도(뭄바이) · 리전 코드 ap-south-1",
 
   /**
-   * 백업과 로그 보관 기간. 요금제를 바꾸거나 백업 운영 방식을 바꾸면 반드시
+   * 백업과 로그 보관 기간. 요금제를 바꾸거나 백업을 뜨기 시작하면 반드시
    * 함께 고친다. 실제 운영과 다르면 허위 고지가 된다.
    */
-  backupRetention: `백엔드는 Supabase 무료 플랜으로 운영되어 서비스 제공자의 자동 백업을 사용하지 않습니다. 대신 운영자가 주기적으로 데이터베이스와 저장소의 사본을 직접 만들어 접근이 제한된 별도 저장소에 보관하며, 이 사본은 최대 ${BACKUP_RETENTION_DAYS}일이 지나면 순차적으로 파기됩니다. 서비스 운영 로그는 1일간 보관된 뒤 삭제됩니다.`,
-  /**
-   * 삭제 후 잔존 데이터. 운영자 백업 사본에 남는 기간을 반드시 밝힌다.
-   * 법령상 보존 의무가 있는지는 법률 검토 대상이다.
-   */
-  deletionRetention: `다만 삭제 시점 이전에 만들어진 운영자 백업 사본에는 해당 콘텐츠가 남아 있을 수 있으며, 그 사본은 최대 ${BACKUP_RETENTION_DAYS}일 안에 파기됩니다. 백업은 장애 복구 목적으로만 사용하고 서비스 제공이나 그 밖의 목적으로는 이용하지 않습니다. 그 밖에 앱 콘텐츠를 의도적으로 보관하지 않으며, 이메일로 접수한 삭제 요청 기록은 처리 확인에 필요한 범위에서만 보관합니다.`,
+  backupRetention:
+    "백엔드는 Supabase 무료 플랜으로 운영되어 자동 백업을 제공하지 않으며, 별도의 백업 사본을 만들지 않습니다. 서비스 운영 로그는 1일간 보관된 뒤 삭제됩니다.",
+  /** 삭제 후 잔존 데이터. 백업을 운영하기 시작하면 반드시 다시 쓴다. */
+  deletionRetention:
+    "백업 사본을 만들지 않으므로 삭제된 콘텐츠가 남는 사본도 없으며, 앱 콘텐츠를 의도적으로 보관하지 않습니다. 삭제 처리 과정에서 생성된 운영 로그는 위 로그 보관 기간이 지나면 삭제되고, 이메일로 접수한 삭제 요청 기록은 처리 확인에 필요한 범위에서만 보관합니다.",
   /** 계정 삭제 요청 처리 목표 기한 (일) */
   deletionSlaDays: 30,
 
