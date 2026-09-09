@@ -60,8 +60,9 @@ export function Privacy() {
       <PolicySection id="controller" index={1} title="처리 주체">
         <p>
           이 방침은 {site.legalEntity}(이하 “운영자”)가 {site.appName}을 제공하면서
-          개인정보를 어떻게 처리하는지 설명합니다. 운영자는 스토어에{" "}
-          {site.developerName}(으)로 표기됩니다.
+          개인정보를 어떻게 처리하는지 설명합니다. 운영자는 App Store에{" "}
+          {site.appStoreSellerName}, Google Play에 {site.playDeveloperName}
+          (으)로 표기됩니다.
         </p>
         <ContactList
           entries={[

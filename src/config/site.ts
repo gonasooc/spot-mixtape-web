@@ -13,11 +13,11 @@ export const site = {
   /** 서비스를 운영하는 법인, 개인사업자 상호 또는 개인 운영자 본명 */
   legalEntity: "최관수",
   /**
-   * 스토어에 노출되는 개발자명. Play Console 계정 세부정보의 개발자 이름과
-   * 글자 그대로 같아야 한다. App Store 판매자명이 다르게 확정되면 이 값을
-   * 쓰는 문구를 스토어별로 나눈다.
+   * 각 스토어에 노출되는 이름. 두 콘솔의 값과 글자 그대로 같아야 한다.
+   * 개인 계정이라 Apple은 법적 명의를, Play는 개발자 이름을 그대로 쓴다.
    */
-  developerName: "gonasooc",
+  appStoreSellerName: "Gwansoo Choi",
+  playDeveloperName: "gonasooc",
   /** 개인정보 보호책임자 이름 또는 담당 부서 */
   privacyOfficer: "최관수",
   /**
