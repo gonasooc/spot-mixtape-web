@@ -135,7 +135,7 @@ export function Terms() {
           제한하지 않습니다.
         </p>
         <p>
-          문의는 {site.developerName}에게 보내 주십시오. 이메일{" "}
+          문의는 {site.legalEntity}에게 보내 주십시오. 이메일{" "}
           <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>
           {site.postalAddress ? <>, 우편 {site.postalAddress}</> : null}.
         </p>
