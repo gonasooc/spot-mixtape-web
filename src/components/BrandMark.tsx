@@ -12,7 +12,7 @@ export function BrandMark({ className = "size-8" }: { className?: string }) {
       <path
         d="M19 37c3.5 0 3.5-10 7-10s3.5 15 7 15 3.5-20 7-20 3.5 15 7 15"
         fill="none"
-        stroke="#0B0D0A"
+        stroke="var(--color-canvas)"
         strokeWidth="4"
         strokeLinecap="round"
       />

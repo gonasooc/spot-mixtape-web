@@ -1,17 +1,18 @@
+import { Reveal, stagger } from "@/components/Reveal";
 import { Waveform } from "@/components/Waveform";
-import { ButtonAnchor, ButtonLink, Eyebrow, Section } from "@/components/ui";
+import { ButtonAnchor, ButtonLink, Section, SectionLabel } from "@/components/ui";
 import { site } from "@/config/site";
 
 const LOOP = [
   {
     step: "01",
     title: "기록",
-    body: "버튼 한 번으로 최대 10초를 녹음합니다. 장소명과 사진, 메모가 한 화면에서 함께 붙습니다.",
+    body: "버튼 한 번으로 최대 10초를 녹음합니다. 같은 화면에서 장소명과 사진, 메모를 함께 붙입니다.",
   },
   {
     step: "02",
     title: "보관",
-    body: "카드는 날짜별 라이브러리와 사운드 지도에 쌓이고, 믹스테이프로 이어 듣습니다.",
+    body: "카드는 날짜별 라이브러리와 사운드 지도에 함께 쌓입니다. 믹스테이프로 묶으면 순서대로 이어 듣습니다.",
   },
   {
     step: "03",
@@ -27,30 +28,35 @@ const PRINCIPLES = [
   "계정 삭제는 프로필과 레코드뿐 아니라 업로드된 원본까지 함께 지웁니다.",
 ];
 
-function StoreActions() {
-  const hasStoreLinks = Boolean(site.appStoreUrl || site.playStoreUrl);
+const CARD_META = [
+  { term: "길이", value: "00:10" },
+  { term: "소유", value: "나" },
+  { term: "접근", value: "서명" },
+];
 
-  if (!hasStoreLinks) {
+function HeroActions() {
+  if (!site.appStoreUrl && !site.playStoreUrl) {
     return (
-      <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <span className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-acid/40 bg-acid/10 px-6 font-mono text-[0.8125rem] font-bold tracking-wide text-acid">
-          <span aria-hidden="true" className="size-2 rounded-full bg-acid" />
-          iOS · Android 출시 준비 중
-        </span>
-        <ButtonAnchor href={`mailto:${site.supportEmail}`} tone="quiet">
-          출시 소식 받기
-        </ButtonAnchor>
-      </div>
+      <>
+        <div className="mt-9 flex justify-center">
+          <ButtonAnchor href={`mailto:${site.supportEmail}`}>
+            출시 소식 받기
+          </ButtonAnchor>
+        </div>
+        <p className="mt-4 mb-0 text-meta text-faint">
+          iOS와 Android 출시를 준비하고 있습니다.
+        </p>
+      </>
     );
   }
 
   return (
-    <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+    <div className="mt-9 flex flex-wrap justify-center gap-3">
       {site.appStoreUrl && (
         <ButtonAnchor href={site.appStoreUrl}>App Store에서 받기</ButtonAnchor>
       )}
       {site.playStoreUrl && (
-        <ButtonAnchor href={site.playStoreUrl} tone="quiet">
+        <ButtonAnchor href={site.playStoreUrl} tone="secondary">
           Google Play에서 받기
         </ButtonAnchor>
       )}
@@ -58,42 +64,30 @@ function StoreActions() {
   );
 }
 
-function FieldCard() {
+/** A single sound card, the unit the whole app is built on. */
+function SoundCard() {
   return (
-    <div className="relative w-full max-w-[calc(100%-0.75rem)] rotate-[1.5deg] rounded-sm sm:max-w-md border border-acid/40 bg-ink-raised bg-linear-[145deg] from-acid/10 to-transparent to-50% p-5 shadow-[0_28px_90px_rgb(0_0_0/40%)] sm:rotate-[2.5deg] sm:p-7">
-      <span
-        aria-hidden="true"
-        className="absolute -right-3 -bottom-3 top-3 left-3 -z-10 border border-line"
-      />
-
-      <div className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] tracking-widest text-muted">
+    <div
+      className="enter mx-auto mt-12 w-full max-w-xl rounded-card bg-surface p-6 sm:p-8"
+      style={{ animationDelay: "240ms" }}
+    >
+      <div className="eyebrow flex items-center justify-between gap-4 text-faint">
         <span>FIELD NOTE / 001</span>
-        <span className="inline-flex items-center gap-1.5 text-acid">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-acid shadow-[0_0_16px_var(--color-acid)]"
-          />
+        <span className="inline-flex items-center gap-2 text-acid">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-acid" />
           비공개
         </span>
       </div>
 
-      <Waveform
-        className="my-6 h-32 border-y border-line py-4 sm:h-40"
-        progress={0.55}
-        animated
-      />
+      <Waveform className="my-6 h-24 sm:my-7 sm:h-28" progress={0.55} animated />
 
-      <dl className="grid grid-cols-3 gap-3">
-        {[
-          { term: "길이", value: "00:10" },
-          { term: "소유", value: "나" },
-          { term: "접근", value: "서명" },
-        ].map((item) => (
-          <div key={item.term} className="border-l border-line pl-3">
-            <dt className="font-mono text-[0.625rem] tracking-widest text-muted uppercase">
-              {item.term}
-            </dt>
-            <dd className="m-0 font-mono text-sm">{item.value}</dd>
+      <dl className="grid grid-cols-3 gap-5">
+        {CARD_META.map((item) => (
+          <div key={item.term}>
+            <dt className="text-caption text-faint">{item.term}</dt>
+            <dd className="m-0 mt-1 font-mono text-meta text-ink">
+              {item.value}
+            </dd>
           </div>
         ))}
       </dl>
@@ -104,104 +98,110 @@ function FieldCard() {
 export function Landing() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden px-5 pt-14 pb-20 sm:px-8 sm:pt-20 sm:pb-28">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-40 -right-32 size-[28rem] rounded-full bg-acid/8 blur-3xl"
-        />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-          <div className="rise">
-            <Eyebrow>Sound archive for places</Eyebrow>
-            <h1 className="text-[2.6rem]/[1.2] sm:text-6xl lg:text-7xl">
+      <section className="flex min-h-[calc(100svh-3.25rem)] flex-col justify-center px-5 py-16 sm:min-h-[calc(100svh-3.75rem)] sm:px-6 sm:py-20">
+        <div className="mx-auto w-full max-w-content">
+          <div className="mx-auto max-w-hero text-center">
+            <SectionLabel className="enter text-faint">
+              iOS · Android 사운드 아카이브
+            </SectionLabel>
+
+            <h1
+              className="enter mt-5 text-hero"
+              style={{ animationDelay: "60ms" }}
+            >
               그때 그곳의 소리를
               <br />
-              <em className="not-italic text-acid">다시 꺼내 듣습니다.</em>
+              <span className="text-acid">다시 꺼내 듣습니다.</span>
             </h1>
-            <p className="mt-6 max-w-xl text-base text-dim sm:text-lg">
-              사진 한 장으로는 담기지 않는 순간이 있습니다. spotMixtape은
-              장소의 10초를 사운드 카드로 남기고, 나만의 믹스테이프로 다시 듣는
-              개인 사운드 아카이브입니다.
-            </p>
-            <StoreActions />
+
+            <div className="enter" style={{ animationDelay: "120ms" }}>
+              <p className="mx-auto mt-6 mb-0 max-w-copy text-body text-muted sm:text-lead">
+                사진 한 장으로는 담기지 않는 순간이 있습니다. 그 장소의 10초를
+                사운드 카드로 남기고, 모아둔 카드를 믹스테이프로 이어 듣습니다.
+              </p>
+              <HeroActions />
+            </div>
           </div>
 
-          <div className="flex justify-start lg:justify-end">
-            <FieldCard />
-          </div>
+          <SoundCard />
         </div>
       </section>
 
-      {/* Core loop */}
-      <Section className="border-t border-line">
-        <div className="mb-12 grid gap-4 lg:grid-cols-[0.42fr_1fr] lg:gap-8">
-          <Eyebrow>핵심 루프</Eyebrow>
-          <h2 className="max-w-[16ch] text-3xl sm:text-5xl">
+      <Section>
+        <Reveal className="grid gap-4 lg:grid-cols-[0.42fr_1fr] lg:gap-12">
+          <SectionLabel>핵심 루프</SectionLabel>
+          <h2 className="max-w-[16ch] text-section sm:text-section-lg">
             기록하고, 보관하고, 다시 꺼냅니다.
           </h2>
-        </div>
+        </Reveal>
 
-        <div className="grid gap-10 md:grid-cols-3 md:gap-8">
-          {LOOP.map((item) => (
-            <article key={item.step} className="border-t-2 border-acid pt-5">
-              <span className="eyebrow text-muted">{item.step}</span>
-              <h3 className="mt-3 mb-2 text-2xl">{item.title}</h3>
-              <p className="m-0 text-sm text-dim lg:text-[0.9375rem]/[1.75]">{item.body}</p>
-            </article>
+        <div className="mt-14 grid gap-4 sm:mt-16 md:grid-cols-3">
+          {LOOP.map((item, index) => (
+            <Reveal
+              key={item.step}
+              as="article"
+              delay={stagger(index)}
+              className="rounded-card bg-surface p-6 sm:p-7"
+            >
+              <span className="eyebrow text-faint">{item.step}</span>
+              <h3 className="mt-3 text-subtitle">{item.title}</h3>
+              <p className="mt-2 mb-0 text-label text-muted sm:text-control">
+                {item.body}
+              </p>
+            </Reveal>
           ))}
         </div>
       </Section>
 
-      {/* Principles */}
-      <Section className="bg-paper text-ink">
-        <div className="grid gap-10 lg:grid-cols-[0.42fr_1fr] lg:gap-16">
-          <div>
-            <Eyebrow className="text-[#536800]">원칙</Eyebrow>
-            <h2 className="max-w-[18ch] text-3xl sm:text-5xl">
+      <Section className="bg-surface">
+        <div className="grid gap-12 lg:grid-cols-[0.42fr_1fr] lg:gap-16">
+          <Reveal>
+            <SectionLabel>원칙</SectionLabel>
+            <h2 className="mt-4 max-w-[18ch] text-section sm:text-section-lg">
               빠진 기능이 아니라, 내린 결정입니다.
             </h2>
-            <ButtonLink to="/privacy" tone="inverse" className="mt-8 no-print">
+            <ButtonLink to="/privacy" tone="secondary" className="no-print mt-8">
               개인정보처리방침 읽기
             </ButtonLink>
-          </div>
+          </Reveal>
 
-          <ol className="self-center">
+          <ol className="m-0 grid list-none gap-7 self-center p-0">
             {PRINCIPLES.map((principle, index) => (
-              <li
+              <Reveal
                 key={principle}
-                className="grid grid-cols-[2.5rem_1fr] items-baseline border-t border-ink/15 py-5 last:border-b"
+                as="li"
+                delay={stagger(index)}
+                className="grid grid-cols-[2rem_1fr] items-baseline"
               >
-                <span className="font-mono text-[0.67rem] font-bold text-[#667a17]">
+                <span className="font-mono text-caption text-acid">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-ink/80">{principle}</span>
-              </li>
+                <span className="text-label text-muted sm:text-control">
+                  {principle}
+                </span>
+              </Reveal>
             ))}
           </ol>
         </div>
       </Section>
 
-      {/* Closing CTA */}
-      <section className="bg-acid px-5 py-16 text-ink sm:px-8 sm:py-20">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <Eyebrow className="text-[#425400]">문의</Eyebrow>
-            <h2 className="max-w-[14ch] text-3xl sm:text-5xl">
-              사람이 직접 답합니다.
-            </h2>
-            <p className="mt-4 mb-0 max-w-lg text-[0.9375rem]/[1.75] text-ink/70">
-              제품 문의도, 개인정보와 계정 삭제 요청도 같은 주소로 받습니다.
-            </p>
-          </div>
+      <Section>
+        <Reveal>
+          <SectionLabel>문의</SectionLabel>
+          <h2 className="mt-4 text-section sm:text-section-lg">
+            사람이 직접 답합니다.
+          </h2>
+          <p className="mt-4 mb-0 max-w-copy text-label text-muted sm:text-control">
+            제품 문의도, 개인정보와 계정 삭제 요청도 같은 주소로 받습니다.
+          </p>
           <ButtonAnchor
             href={`mailto:${site.supportEmail}`}
-            tone="dark"
-            className="sm:shrink-0"
+            className="mt-8 font-mono"
           >
             {site.supportEmail}
           </ButtonAnchor>
-        </div>
-      </section>
+        </Reveal>
+      </Section>
     </>
   );
 }
