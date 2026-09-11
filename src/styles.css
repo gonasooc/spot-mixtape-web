@@ -1,78 +1,125 @@
 @import "tailwindcss";
 
+/* Korean body face. Self-hosted because `font-src 'self'` in public/_headers
+   blocks external font CDNs; the dynamic subset means a page fetches only the
+   unicode ranges it actually renders. */
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+
+/* Latin display face and meta numerals, shared with the app. */
 @import "@fontsource-variable/outfit/index.css";
 @import "@fontsource-variable/jetbrains-mono/index.css";
 
 /*
-  Design tokens mirror the spotMixtape app (src/constants/Colors.ts + tailwind.config.js).
-  Dark "record shop" base, electric-lime accent, muted record-label violet.
+  Token contract. Every colour, size, radius and duration on this site comes
+  from here — no arbitrary values in components. Semantics follow the shell
+  the element sits on: the site chrome and the landing are dark (canvas/ink),
+  legal documents are paper (paper/paper-ink).
+
+  `pnpm tokens:check` guards the one trap here: a name declared in two
+  namespaces makes its utility unreachable in one of them, silently.
+
+  See DESIGN.md for the rules these tokens exist to enforce.
 */
 @theme {
-  --color-ink: #0b0d0a;
-  --color-ink-raised: #10130f;
-  --color-ink-deep: #070806;
+  /* ---------- Dark shell ---------- */
+  --color-canvas: #0b0d0a;
   --color-surface: #171a15;
-  --color-surface-raised: #1e221b;
-  --color-surface-pressed: #252a21;
+  /* Quiet interactive surface: nav items, secondary actions. Named `chip`
+     rather than `control` because `--text-control` already exists, and a name
+     living in both the colour and font-size namespaces makes Tailwind resolve
+     `text-<name>` to the colour — silently painting body copy the background. */
+  --color-chip: #272d1e;
+  --color-chip-hover: #333a28;
+  --color-line: #2a2f25;
 
+  --color-ink: #f3f5ec;
+  --color-muted: #a8ae9f;
+  --color-faint: #838a7e;
+
+  /* ---------- Accent ---------- */
   --color-acid: #c9f55d;
-  --color-acid-strong: #d7ff75;
-  --color-acid-muted: #263019;
-  --color-violet: #9e83cf;
+  --color-acid-bright: #d7ff75;
 
+  /* ---------- Paper, for legal documents ---------- */
   --color-paper: #f3f5ec;
-  --color-paper-deep: #e4e7dd;
-  --color-dim: #aab0a2;
-  --color-muted: #777d72;
-  --color-line: #343a30;
-  --color-line-strong: #4a5243;
+  --color-paper-raised: #e9ecdd;
+  --color-paper-line: #d3d8c4;
+  --color-paper-ink: #14170e; /* headings */
+  --color-paper-body: #383e30; /* running prose */
+  --color-paper-muted: #5c6352; /* meta, table of contents */
+  --color-paper-accent: #45560b; /* the acid accent, darkened for paper */
 
-  --color-danger: #ff7770;
-  --color-warn: #f0c76a;
-
+  /* ---------- Type ---------- */
   --font-sans:
-    "Outfit Variable", "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
-    sans-serif;
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Outfit Variable", var(--font-sans);
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --radius-card: 1.25rem;
+  /* Named for the role, not for a t-shirt size, so a component cannot pick a
+     step that has no meaning. */
+  --text-caption: 0.75rem; /* 12 */
+  --text-caption--line-height: 1.6;
+  --text-meta: 0.8125rem; /* 13 */
+  --text-meta--line-height: 1.65;
+  --text-label: 0.875rem; /* 14 */
+  --text-label--line-height: 1.7;
+  --text-control: 0.9375rem; /* 15 */
+  --text-control--line-height: 1.5;
+  --text-body: 1.0625rem; /* 17 */
+  --text-body--line-height: 1.75;
+  --text-lead: 1.125rem; /* 18 */
+  --text-lead--line-height: 1.75;
+  --text-subtitle: 1.25rem; /* 20 */
+  --text-subtitle--line-height: 1.45;
+  --text-title: 1.5rem; /* 24 */
+  --text-title--line-height: 1.35;
+  --text-section: 1.875rem; /* 30 */
+  --text-section--line-height: 1.25;
+  --text-section-lg: 2.25rem; /* 36 */
+  --text-section-lg--line-height: 1.22;
+  --text-display: 2.75rem; /* 44 */
+  --text-display--line-height: 1.18;
+  /* Fluid because the hero line is long Korean: 60px would overflow a 320px
+     screen, and a breakpoint step would jump mid-sentence. */
+  --text-hero: clamp(2.125rem, 8vw, 3.75rem);
+  --text-hero--line-height: 1.16;
 
-  /* Body sizes (xs–lg) keep airy leading for Korean prose. Every size from xl
-     up is display type here — headings only — so leading tightens as the type
-     grows, instead of every step inheriting the same loose ratio. */
-  --text-xs--line-height: 1.6;
-  --text-sm--line-height: 1.71;
-  --text-base--line-height: 1.8;
-  --text-lg--line-height: 1.78;
-  --text-xl--line-height: 1.5;
-  --text-2xl--line-height: 1.4;
-  --text-3xl--line-height: 1.34;
-  --text-4xl--line-height: 1.26;
-  --text-5xl--line-height: 1.18;
-  --text-6xl--line-height: 1.14;
-  --text-7xl--line-height: 1.1;
+  /* ---------- Layout ---------- */
+  --container-content: 72.5rem; /* 1160 — the alignment line for all content */
+  --container-hero: 48.75rem; /* 780 — centred hero copy */
+  --container-prose: 46rem; /* 736 — single-column legal documents */
+  --container-copy: 35rem; /* 560 — body copy beside a heading */
+
+  /* ---------- Radius ---------- */
+  --radius-control: 0.5rem; /* 8 */
+  --radius-action: 0.875rem; /* 14 */
+  --radius-card: 1rem; /* 16 */
+
+  /* ---------- Motion ---------- */
+  --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
   /* Anchor jumps stay instant: Chrome strands css smooth scrolling near the
      top of these prerendered pages, which silently breaks every TOC link. */
   html {
-    background-color: var(--color-ink);
+    background-color: var(--color-canvas);
     -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
   }
 
   body {
     margin: 0;
     min-width: 320px;
     overflow-x: clip;
-    background-color: var(--color-ink);
-    color: var(--color-paper);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 1rem;
-    /* Matches --text-base--line-height so inherited text and text-base agree. */
-    line-height: 1.8;
+    font-size: var(--text-body);
+    line-height: 1.75;
+    font-weight: 400;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 
@@ -82,30 +129,46 @@
     overflow-wrap: break-word;
   }
 
-  /* Film grain, matching the app's tactile "digital vinyl" texture. */
+  /* Film grain, matching the app's tactile "digital vinyl" texture. The only
+     decorative layer on the site; nothing else may add one. */
   body::before {
     position: fixed;
     z-index: 100;
     inset: 0;
     pointer-events: none;
     content: "";
-    opacity: 0.03;
+    opacity: 0.028;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
   }
 
   ::selection {
     background-color: var(--color-acid);
-    color: var(--color-ink);
+    color: var(--color-canvas);
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-acid);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-acid);
+    outline-offset: 4px;
   }
 
-  /* Acid on the light sections is all but invisible; keep the ring readable. */
-  :where(.bg-paper, .bg-paper-deep, .bg-acid) :focus-visible {
-    outline-color: var(--color-ink);
+  /* Acid on the light document surface is all but invisible. */
+  :where(.bg-paper, .bg-paper-raised, .bg-acid) :focus-visible {
+    outline-color: var(--color-paper-ink);
+  }
+
+  /* Weight is capped at 500 everywhere, including <strong> and <b>. Hierarchy
+     comes from size, colour and space — never from a heavier cut. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong,
+  b,
+  dt,
+  th {
+    font-weight: 500;
   }
 
   h1,
@@ -113,9 +176,11 @@
   h3,
   h4 {
     text-wrap: balance;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.3;
+    letter-spacing: -0.035em;
+  }
+
+  h1 {
+    letter-spacing: -0.05em;
   }
 
   p {
@@ -123,13 +188,69 @@
   }
 }
 
+/*
+  Small mono label, for Latin and numerals only. Korean set in a mono face at
+  0.1em tracking falls back to a different family at monospaced metrics and
+  reads as stretched rather than deliberate — Korean labels use SectionLabel.
+*/
 @utility eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  line-height: 1.8;
+  font-size: var(--text-caption);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
   text-transform: uppercase;
+}
+
+/*
+  Scroll reveal.
+
+  Server HTML is fully visible and stays that way without JavaScript: the
+  hidden state is only ever applied by the Reveal hook, and only to elements
+  that start below the fold. Anything already on screen at first paint is
+  never touched, so there is no flash and no content behind an observer that
+  might not fire.
+*/
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+[data-reveal="pending"][data-reveal-art] {
+  transform: translateY(28px) scale(0.985);
+}
+
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 600ms var(--ease-emphasized),
+    transform 600ms var(--ease-emphasized);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal="shown"][data-reveal-art] {
+  transition-duration: 760ms;
+}
+
+/*
+  First-paint entrance, for the hero only. Pure CSS so the prerendered markup
+  needs no JavaScript to become visible — everything below the fold uses the
+  scroll reveal above instead.
+*/
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.enter {
+  animation: enter 620ms var(--ease-emphasized) both;
 }
 
 /* Recording bars: mirrors the candle-style waveform used on sound cards. */
@@ -148,21 +269,6 @@
   animation: bar-pulse 1.9s ease-in-out infinite;
 }
 
-@keyframes rise {
-  from {
-    transform: translateY(14px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.rise {
-  animation: rise 620ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -170,6 +276,17 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Squashing the duration would freeze the bars at the keyframe's 45% height,
+     so the waveform has to opt out rather than run instantly. */
+  .bar-pulse {
+    animation: none !important;
   }
 }
 
@@ -182,5 +299,10 @@
   body::before,
   .no-print {
     display: none !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

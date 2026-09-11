@@ -20,7 +20,8 @@
 - Vite 7 + React 19 + TypeScript
 - Tailwind CSS v4 (`@tailwindcss/vite`)
 - React Router 7
-- Outfit · JetBrains Mono (`@fontsource-variable`로 self-host — 외부 CDN 요청 없음)
+- Pretendard(한국어 본문) · Outfit(라틴 워드마크) · JetBrains Mono(숫자·라틴 메타) — 모두 self-host, 외부 CDN 요청 없음
+  - 세 글꼴 모두 OFL 1.1이다. 고지와 라이선스 전문은 `public/licenses/fonts.txt`로 배포되고 푸터에서 연결한다
 
 ## 설치와 실행
 
@@ -31,9 +32,16 @@ pnpm dev              # 개발 서버
 pnpm build            # 타입체크 → 클라이언트 빌드 → SSR 빌드 → 프리렌더
 pnpm preview          # dist를 정적 호스팅과 동일한 방식으로 서빙
 pnpm config:check     # 미교체 플레이스홀더 검사
+pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 실행)
 ```
 
 `pnpm preview`는 SPA history fallback 없이(`appType: "mpa"`) 서빙한다. 프리렌더된 파일이 실제로 존재하는 경로만 200을 반환하므로 배포 결과를 그대로 확인할 수 있다.
+
+## 디자인 기준
+
+색·서체·간격·모션·문구 규칙과 그 근거는 [DESIGN.md](./DESIGN.md)에 있다. 토큰의 기준
+파일은 `src/styles.css`의 `@theme` 하나이며, 컴포넌트에 임의 색값이나 임의 크기를 쓰지
+않는다. `pnpm tokens:check`가 색과 글자 크기 네임스페이스의 이름 충돌을 빌드 전에 잡는다.
 
 ## 잔여 작업
 

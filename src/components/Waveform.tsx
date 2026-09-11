@@ -35,7 +35,7 @@ export function Waveform({
           key={index}
           className={[
             "w-full max-w-[10px] flex-1 rounded-full",
-            index < playedCount ? "bg-acid" : "bg-line",
+            index < playedCount ? "bg-acid" : "bg-acid/20",
             animated ? "bar-pulse" : "",
           ].join(" ")}
           style={{

@@ -13,30 +13,33 @@ interface PolicyLayoutProps {
   children: ReactNode;
 }
 
-/** Plain single-column legal document: title, effective date, TOC, sections. */
+/**
+ * Legal documents are documents, not marketing: one column on paper, no hero,
+ * no reveal animation, nothing between the title and the text but a table of
+ * contents. Sections are separated by space rather than by rules.
+ */
 export function PolicyLayout({ title, sections, children }: PolicyLayoutProps) {
   return (
-    <div className="bg-paper text-ink">
-      <div className="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <div className="bg-paper text-paper-body">
+      <div className="mx-auto max-w-prose px-5 py-14 sm:px-6 sm:py-20">
         <header>
-          <h1 className="text-3xl sm:text-4xl">{title}</h1>
-          <p className="mt-3 mb-0 font-mono text-xs tracking-wide text-ink/55">
-            시행일 {site.effectiveDate}
+          <h1 className="text-section text-paper-ink sm:text-section-lg">
+            {title}
+          </h1>
+          <p className="mt-3 mb-0 text-meta text-paper-muted">
+            시행일 <span className="font-mono">{site.effectiveDate}</span>
           </p>
         </header>
 
-        <nav
-          aria-label="이 문서의 목차"
-          className="mt-8 border-y border-ink/15 py-4 no-print"
-        >
-          <ol className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+        <nav aria-label="이 문서의 목차" className="no-print mt-9">
+          <ol className="m-0 -mx-3 grid list-none grid-cols-1 gap-x-4 p-0 sm:grid-cols-2">
             {sections.map((section, index) => (
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  className="flex min-h-10 items-center gap-2.5 text-sm text-ink/60 no-underline transition-colors hover:text-ink"
+                  className="flex min-h-10 items-center gap-2.5 rounded-control px-3 text-control text-paper-muted no-underline transition-colors hover:bg-paper-raised hover:text-paper-ink"
                 >
-                  <span className="font-mono text-[0.6875rem] text-[#667a17]">
+                  <span className="font-mono text-caption text-paper-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   {section.title}
@@ -64,14 +67,14 @@ export function PolicySection({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-b border-ink/15 py-8 sm:py-10">
-      <h2 className="mb-4 flex items-baseline gap-2.5 text-xl sm:text-2xl">
-        <span className="font-mono text-xs font-bold text-[#667a17]">
+    <section id={id} className="scroll-mt-20 pt-12 sm:pt-14">
+      <h2 className="flex items-baseline gap-2.5 text-subtitle text-paper-ink sm:text-title">
+        <span className="font-mono text-caption text-paper-accent">
           {String(index).padStart(2, "0")}
         </span>
         {title}
       </h2>
-      <div className="flex flex-col gap-5 text-[0.95rem]/[1.8] text-ink/75 sm:text-base [&_a]:font-bold [&_a]:text-ink [&_a]:underline [&_a]:underline-offset-4">
+      <div className="mt-4 flex flex-col gap-5 text-control sm:text-body [&_a]:text-paper-ink [&_a]:underline [&_a]:underline-offset-4">
         {children}
       </div>
     </section>
@@ -80,7 +83,7 @@ export function PolicySection({
 
 export function PolicyList({ items }: { items: ReactNode[] }) {
   return (
-    <ul className="my-0 list-disc space-y-3 pl-5 marker:text-[#708d00]">
+    <ul className="my-0 list-disc space-y-3 pl-5 marker:text-paper-accent">
       {items.map((item, index) => (
         <li key={index}>{item}</li>
       ))}
@@ -96,9 +99,9 @@ export function PolicyNote({
   children: ReactNode;
 }) {
   return (
-    <aside className="my-2 border border-ink/15 bg-paper-deep px-5 py-4">
-      <strong className="mb-2 block text-ink">{heading}</strong>
-      <div className="text-ink/75">{children}</div>
+    <aside className="my-1 rounded-card bg-paper-raised px-5 py-4">
+      <strong className="mb-2 block text-paper-ink">{heading}</strong>
+      {children}
     </aside>
   );
 }
@@ -118,9 +121,9 @@ export function PolicyTable({
       role="region"
       aria-label={caption}
       tabIndex={0}
-      className="my-2 max-w-full overflow-x-auto border border-ink/15"
+      className="my-1 max-w-full overflow-x-auto rounded-card border border-paper-line"
     >
-      <table className="w-full min-w-[38rem] border-collapse text-sm">
+      <table className="w-full min-w-[38rem] border-collapse text-label">
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr>
@@ -128,7 +131,7 @@ export function PolicyTable({
               <th
                 key={cell}
                 scope="col"
-                className="border-r border-b border-ink/15 bg-paper-deep px-3.5 py-3 text-left font-mono text-[0.6875rem] tracking-wide uppercase last:border-r-0"
+                className="border-b border-paper-line bg-paper-raised px-4 py-3 text-left text-caption text-paper-ink"
               >
                 {cell}
               </th>
@@ -141,7 +144,7 @@ export function PolicyTable({
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="border-r border-b border-ink/15 px-3.5 py-3 align-top text-ink/75 first:font-bold first:text-ink last:border-r-0 [tr:last-child_&]:border-b-0"
+                  className="border-b border-paper-line px-4 py-3 align-top first:text-paper-ink [tr:last-child_&]:border-b-0"
                 >
                   {cell}
                 </td>
@@ -160,16 +163,16 @@ export function ContactList({
   entries: { term: string; detail: ReactNode }[];
 }) {
   return (
-    <dl className="mt-2 border-t border-ink/15">
+    <dl className="m-0 grid gap-3">
       {entries.map((entry) => (
         <div
           key={entry.term}
-          className="grid gap-1 border-b border-ink/15 py-3 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:items-baseline sm:gap-4"
+          className="grid gap-1 sm:grid-cols-[9rem_1fr] sm:items-baseline sm:gap-4"
         >
-          <dt className="font-mono text-xs font-bold tracking-wide uppercase">
+          <dt className="text-caption text-paper-muted">
             {entry.term}
           </dt>
-          <dd className="m-0 text-ink/75">{entry.detail}</dd>
+          <dd className="m-0 text-paper-ink">{entry.detail}</dd>
         </div>
       ))}
     </dl>
