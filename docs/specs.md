@@ -13,7 +13,7 @@
 | 번들러 | Vite `^7.1.11` | [vite.config.ts](../vite.config.ts) |
 | UI | React `^19.2.0`, React Router `^7.9.4` | |
 | 스타일 | Tailwind CSS `^4.1.16` (`@tailwindcss/vite`) | 설정 파일 없이 [src/styles.css](../src/styles.css)의 `@theme`로 토큰 정의 |
-| 폰트 | `pretendard`(한국어 본문), `@fontsource-variable/outfit`(라틴 워드마크), `@fontsource-variable/jetbrains-mono`(숫자·라틴 메타) | 모두 self-host, 외부 CDN 요청 없음. 셋 다 OFL 1.1이고 고지는 `public/licenses/fonts.txt` |
+| 폰트 | `@fontsource/gothic-a1` 400·500·700(한국어), `@fontsource-variable/outfit`(라틴 워드마크), `@fontsource-variable/jetbrains-mono`(숫자·라틴 메타) | 모두 self-host, 외부 CDN 요청 없음. 셋 다 OFL 1.1이고 고지는 `public/licenses/fonts.txt`. 한글은 unicode-range 99조각이며 `assetsInlineLimit: 0`으로 인라인하지 않는다 |
 | 타입 | TypeScript `^5.9.3`, 빌드 타깃 `es2022` | |
 | 호스팅 | GitHub Pages project page | [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) |
 
@@ -26,6 +26,7 @@
 - **`pnpm preview`는 SPA history fallback 없이(`appType: "mpa"`) 돈다.** 프로덕션과 같은 정적 호스트 동작을 재현하기 위해서이며, fallback을 켜면 깨진 URL과 404가 가려진다. 이 설정을 바꾸지 않는다.
 - **색·크기는 `src/styles.css`의 `@theme`에서만 온다.** 컴포넌트에 임의 색값이나 임의 크기를 쓰지 않으며, 한 이름을 색과 글자 크기 네임스페이스에 겹쳐 두지 않는다. `pnpm tokens:check`가 후자를 빌드 전에 잡는다. 근거는 [docs/design.md](design.md).
 - **인라인 `style` 속성과 `data:` URI 자산은 CSP와 충돌한다.** 현재 호스트에서는 CSP가 적용되지 않아 드러나지 않지만, 헤더를 살리는 호스트로 옮기면 바로 깨진다. 새 코드에서 인라인 style을 늘리지 않는다. 자세한 내용은 [docs/architecture.md](architecture.md)의 알려진 구조 제약을 본다.
+- **이미지는 `src/assets/`에서 import한다.** `public/`에 두면 하위 경로와 해시 캐시를 직접 챙겨야 한다. 사진류는 WebP로 줄여 넣고(`cwebp -q 82`), `loading="lazy"`와 명시적 `width`/`height`를 함께 쓴다. 스토어 스크린샷의 정본과 갱신 절차는 [README.md](../README.md)의 "앱 스크린샷"에 있다.
 - **한국어 본문은 `word-break: keep-all`을 전제로 작성한다.** 어절 중간에서 줄바꿈되지 않으며, 이메일·URL처럼 끊을 수 없는 토큰만 `overflow-wrap: break-word`로 처리한다.
 - **커밋 메시지에 도구 귀속 줄(`Co-Authored-By` 등)을 붙이지 않는다.**
 

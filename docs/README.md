@@ -28,7 +28,8 @@ UI를 추가·수정·검토하기 전에 관련 부분을 확인합니다.
 
 ## 진행 중·예정·보류 작업
 
-- [docs/work/W-004-main-app-brand-alignment.md](work/W-004-main-app-brand-alignment.md) — 앱 기준으로 브랜드 요소 통일 — 진행 중
+- [docs/work/W-005-main-app-feel.md](work/W-005-main-app-feel.md) — 랜딩을 앱의 결로: 리듬·서체·색 폭·밀도 — 진행 중
+- [docs/work/W-004-main-app-brand-alignment.md](work/W-004-main-app-brand-alignment.md) — 앱 기준으로 브랜드 요소 통일 — 진행 중 (커밋 완료, 푸시 대기)
 - [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md) — 보안 헤더 방침과 CSP 대응 — 보류 (OWNER 결정 대기)
 - [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md) — 사람이 확인해야 할 항목과 공유 자산 — 예정
 - [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md) — 문서 구조 적용과 현황 파악 — 진행 중

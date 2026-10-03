@@ -80,7 +80,8 @@ export function SectionLabel({
 
 /**
  * Page gutter and vertical rhythm. Sections are separated by this space and
- * by the surface they sit on — never by a rule.
+ * by the surface they sit on — never by a rule. 64/96px is the app's density
+ * rather than a landing page's: the 144px rhythm read as a different product.
  */
 export function Section({
   children,
@@ -93,7 +94,7 @@ export function Section({
   innerClassName?: string;
 } & HTMLAttributes<HTMLElement>) {
   return (
-    <section className={`px-5 py-22 sm:px-6 sm:py-36 ${className}`} {...rest}>
+    <section className={`px-5 py-16 sm:px-6 sm:py-24 ${className}`} {...rest}>
       <div className={`mx-auto max-w-content ${innerClassName}`}>{children}</div>
     </section>
   );

@@ -10,7 +10,7 @@
 
 | 경로                 | 내용                                                       |
 | -------------------- | ---------------------------------------------------------- |
-| `/`                  | 홍보용 랜딩 — 컨셉, 핵심 루프(기록·보관·공유), 운영 원칙   |
+| `/`                  | 홍보용 랜딩 — 컨셉, 핵심 루프(기록·보관·공유), 운영 원칙. 앱 화면은 히어로와 루프 카드 안에 |
 | `/privacy`           | 개인정보처리방침                                           |
 | `/terms`             | 이용약관                                                   |
 | `/account-deletion`  | 계정 삭제 안내 (앱스토어·구글플레이 심사 요구 항목)        |
@@ -24,8 +24,9 @@
 - Vite 7 + React 19 + TypeScript
 - Tailwind CSS v4 (`@tailwindcss/vite`)
 - React Router 7
-- Pretendard(한국어 본문) · Outfit(라틴 워드마크) · JetBrains Mono(숫자·라틴 메타) — 모두 self-host, 외부 CDN 요청 없음
+- Gothic A1(한국어 본문·제목) · Outfit(라틴 워드마크) · JetBrains Mono(숫자·라틴 메타) — 모두 self-host, 외부 CDN 요청 없음
   - 세 글꼴 모두 OFL 1.1이다. 고지와 라이선스 전문은 `public/licenses/fonts.txt`로 배포되고 푸터에서 연결한다
+  - 한글은 unicode-range로 99조각 분할돼 페이지가 실제로 그리는 글자 블록만 받는다. `vite.config.ts`의 `assetsInlineLimit: 0`이 이 조각들을 `data:` URI로 인라인하지 않게 막는다
 
 ## 설치와 실행
 
@@ -47,6 +48,37 @@ pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 �
 기준 파일은 `src/styles.css`의 `@theme` 하나이며, 컴포넌트에 임의 색값이나 임의 크기를
 쓰지 않는다. `pnpm tokens:check`가 색과 글자 크기 네임스페이스의 이름 충돌을 빌드 전에
 잡는다.
+
+## 앱 스크린샷
+
+랜딩의 앱 화면은 앱 저장소 Play 스토어 스크린샷 다섯 장에서 **폰 프레임만 잘라** 쓴다. 정본은
+`spot-mixtape/store/android/screenshots/`의 `01-capture`, `02-library`, `03-card-detail`,
+`04-mixtape`, `06-export-preview`(1080×1920, 브랜드 배경 위 영어 헤드라인 + 폰 캡처)이고, 이
+저장소에는 잘라낸 웹용 사본만 둔다.
+
+| 자리 | 화면 |
+| --- | --- |
+| 히어로 카드 스택 앞장 | `03-card-detail` — "다시 꺼내 듣습니다"에 해당하는 사운드 카드 상세 |
+| 핵심 루프 · 기록 | `01-capture` |
+| 핵심 루프 · 보관 | `02-library` + `04-mixtape`, 둘로 나눈 커버 (앱 `MixtapeCardCover`의 분할 레이아웃) |
+| 핵심 루프 · 공유 | `06-export-preview` |
+
+- 위치: `src/assets/screenshots/{capture,library,listen,mixtape,share}.webp`, 720×1440(1:2).
+  원본에서 폰 프레임(717×1427, 좌상단 182,407) 주위로 740×1480 상자(좌상단 170,380)를 잘라 줄인 것이다.
+  `src/assets/`에서 import하므로 Vite가 해시를 붙여 `/assets/`로 내보내고 1년 immutable 캐시를
+  탄다.
+- 갱신: 앱 저장소에서 PNG를 다시 만든 뒤 아래처럼 다시 자른다. 다섯 장의 프레임 위치는 같다.
+
+  ```bash
+  cwebp -q 82 -m 6 -crop 170 380 740 1480 -resize 720 1440 01-capture.png -o src/assets/screenshots/capture.webp
+  ```
+
+- 주의: 앱 UI는 영어다. 설명은 한국어 본문과 `alt`(`src/pages/Landing.tsx`의 `SHOT`)가 맡는다.
+  `01-capture`는 위치 pill의 실제 동네명을 `CURRENT LOCATION`으로 지운 판이어야 하고, 사운드 맵
+  장면은 녹음 장소가 드러나 스토어 세트에서 뺐으므로 여기서도 쓰지 않는다. 배경은 앱 저장소
+  `store/README.md`에 있다.
+- 히어로 이미지는 첫 화면이라 `loading="eager"` + `fetchPriority="high"`, 루프 카드의 커버는
+  `loading="lazy"`. 모두 `width`/`height`를 명시해 레이아웃 이동이 없다.
 
 ## 현황과 잔여 작업
 

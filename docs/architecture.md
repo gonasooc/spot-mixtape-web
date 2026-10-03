@@ -60,7 +60,7 @@ src/
 ## 알려진 구조 제약
 
 - **GitHub Pages는 커스텀 응답 헤더를 지원하지 않는다.** `public/_headers`는 Netlify·Cloudflare Pages 형식이라 현재 호스트에서 완전히 무시된다. 2026-10-04 라이브 응답 확인 결과 CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`, `Referrer-Policy`가 하나도 나가지 않는다. 파일 자체는 `/_headers`로 그냥 서빙된다.
-- **`_headers`의 CSP는 지금 켜면 사이트를 깨뜨린다.** 한 번도 적용된 적이 없어 검증되지 않았다. 2026-10-04 dist를 그 헤더 그대로 로컬에 띄워 확인한 결과, `style-src 'self'`가 인라인 `style` 속성을 차단하고(프리렌더된 랜딩에 27건 — 파형 막대 높이, 히어로 `animation-delay`, `Reveal` 전환값) `font-src 'self'`가 Vite가 base64로 인라인한 `data:` 폰트 1건을 차단한다. 헤더를 살리는 호스트로 옮기기 전에 CSP나 구현을 먼저 고쳐야 한다. 근거는 [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md)에 있다.
+- **`_headers`의 CSP는 지금 켜면 사이트를 깨뜨린다.** 한 번도 적용된 적이 없어 검증되지 않았다. 2026-10-04 dist를 그 헤더 그대로 로컬에 띄워 확인한 결과, `style-src 'self'`가 인라인 `style` 속성을 차단한다(프리렌더된 랜딩에 27건 — 파형 막대 높이, 히어로 `animation-delay`, `Reveal` 전환값). `font-src 'self'`에 걸리던 `data:` 폰트는 2026-10-04 `build.assetsInlineLimit: 0`으로 없앴다. 헤더를 살리는 호스트로 옮기기 전에 CSP나 구현을 먼저 고쳐야 한다. 근거는 [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md)에 있다.
 - **공개 origin이 도메인 루트가 아니라 하위 경로다.** `https://gonasooc.github.io/spot-mixtape-web`. 앱의 `getLegalPageUrl()`은 하위 경로를 받도록 이미 수정돼 있지만(끝 슬래시는 정규화, `.html`로 끝나면 거절), 루트 배포를 가정한 코드나 문서가 남아 있으면 어긋난다.
 - **저장소 이름이 공개 URL의 일부다.** 이름을 바꾸면 스토어와 방침에 제출한 URL이 전부 깨진다.
 - **배포 워크플로는 main push 전용이다.** PR 시점에 `config:check`나 빌드를 돌리는 워크플로는 없다.

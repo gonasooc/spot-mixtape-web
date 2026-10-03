@@ -50,7 +50,7 @@
 - [x] `_headers`의 CSP를 켰을 때 깨지는 것 측정
 - [ ] 호스팅 방침 결정 (OWNER)
 - [ ] 인라인 `style` 27건을 CSS 변수나 클래스로 옮길지 결정하고 적용
-- [ ] `build.assetsInlineLimit: 0`으로 `data:` 폰트 제거
+- [x] `build.assetsInlineLimit: 0`으로 `data:` 폰트 제거 — 2026-10-04 [W-005](W-005-main-app-feel.md)에서 적용, 빌드 CSS의 `data:` 폰트 0건 확인
 - [ ] 수정한 CSP로 다시 측정해 위반 0건 확인
 - [ ] 방침에 맞게 `public/_headers`를 살리거나 지우고, [docs/architecture.md](../architecture.md)의 알려진 구조 제약을 갱신
 

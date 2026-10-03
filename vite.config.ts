@@ -27,5 +27,8 @@ export default defineConfig(({ isPreview }) => ({
   },
   build: {
     target: "es2022",
+    /* Sliced Korean fonts come as dozens of small woff2 files; inlined as
+     * data: URIs they would bloat the stylesheet and trip `font-src 'self'`. */
+    assetsInlineLimit: 0,
   },
 }));
