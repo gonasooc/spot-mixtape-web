@@ -115,13 +115,15 @@ pnpm config:check   # 남아 있는 항목을 파일:줄 번호와 함께 출력
 
 ## 디자인 토큰
 
-`src/styles.css`의 `@theme` 블록이 앱의 `src/constants/Colors.ts` · `tailwind.config.js`를 그대로 따른다. 앱의 팔레트가 바뀌면 이 블록을 함께 갱신한다.
+`src/styles.css`의 `@theme` 블록이 앱의 `src/constants/Colors.ts` 다크 팔레트를 역할 이름으로 옮긴 것이다. 각 토큰 주석에 앱 쪽 이름이 적혀 있으니 앱의 팔레트가 바뀌면 이 블록을 함께 갱신한다. 마크·아이콘·파형·카드 치수도 앱이 기준이다. 전체 표와 근거는 [docs/design.md](./docs/design.md)에 있다.
 
-| 토큰             | 값        | 용도                       |
-| ---------------- | --------- | -------------------------- |
-| `--color-ink`    | `#0B0D0A` | 기본 배경                  |
-| `--color-acid`   | `#C9F55D` | 강조 (Electric Lime)       |
-| `--color-violet` | `#9E83CF` | 보조 (record-label violet) |
-| `--color-paper`  | `#F3F5EC` | 밝은 섹션 배경, 본문 텍스트 |
+| 토큰              | 값        | 앱 이름           | 용도                          |
+| ----------------- | --------- | ----------------- | ----------------------------- |
+| `--color-canvas`  | `#0B0D0A` | background        | 기본 배경                     |
+| `--color-surface` | `#171A15` | surface           | 카드                          |
+| `--color-chip`    | `#1E221B` | surfaceElevated   | 조용한 컨트롤 면, 마크 디스크 |
+| `--color-ink`     | `#F3F5EC` | text              | 글자                          |
+| `--color-acid`    | `#C9F55D` | primary           | 강조 (Electric Lime)          |
+| `--color-paper`   | `#F3F5EC` | —                 | 법률 문서 배경 (앱에 대응 없음) |
 
 한국어 본문은 `word-break: keep-all`로 어절 중간에서 줄바꿈되지 않게 하고, 이메일이나 URL처럼 끊을 수 없는 토큰만 `overflow-wrap: break-word`로 처리한다.

@@ -21,20 +21,31 @@
   See docs/design.md for the rules these tokens exist to enforce.
 */
 @theme {
-  /* ---------- Dark shell ---------- */
-  --color-canvas: #0b0d0a;
-  --color-surface: #171a15;
-  /* Quiet interactive surface: nav items, secondary actions. Named `chip`
-     rather than `control` because `--text-control` already exists, and a name
-     living in both the colour and font-size namespaces makes Tailwind resolve
-     `text-<name>` to the colour — silently painting body copy the background. */
-  --color-chip: #272d1e;
-  --color-chip-hover: #333a28;
-  --color-line: #2a2f25;
+  /* ---------- Dark shell ----------
+     Values are the app's src/constants/Colors.ts dark palette, named for the
+     role they play here. The app name is in the comment so a palette change
+     there can be carried across. */
+  --color-canvas: #0b0d0a; /* background */
+  --color-canvas-raised: #10130f; /* backgroundRaised — top of the screen gradient, the record disc */
+  --color-canvas-deep: #070806; /* backgroundDeep — bottom of the screen gradient, shadow colour */
+  --color-surface: #171a15; /* surface — cards */
+  /* Quiet interactive surface: nav items, secondary actions, the brand mark's
+     disc. The app calls it surfaceElevated. Named `chip` rather than `control`
+     because `--text-control` already exists, and a name living in both the
+     colour and font-size namespaces makes Tailwind resolve `text-<name>` to
+     the colour — silently painting body copy the background. */
+  --color-chip: #1e221b; /* surfaceElevated */
+  --color-chip-hover: #252a21; /* surfacePressed */
+  --color-line: #343a30; /* border */
+  --color-line-strong: #4a5243; /* borderStrong — record grooves, secondary action edge */
 
-  --color-ink: #f3f5ec;
-  --color-muted: #a8ae9f;
+  --color-ink: #f3f5ec; /* text */
+  --color-muted: #aab0a2; /* textDim */
+  /* The app's textMuted #777d72 is 4.15:1 on surface, under AA for small
+     text, so running copy keeps this lifted value. */
   --color-faint: #838a7e;
+  /* The app's `dim`, for non-text marks only: unplayed waveform bars. */
+  --color-dim: #7a8174;
 
   /* ---------- Accent ---------- */
   --color-acid: #c9f55d;
@@ -92,10 +103,18 @@
   --container-prose: 46rem; /* 736 — single-column legal documents */
   --container-copy: 35rem; /* 560 — body copy beside a heading */
 
-  /* ---------- Radius ---------- */
+  /* ---------- Radius ----------
+     The app's three most used corners: 14 on actions, 22 on sound cards, 16
+     on the wells inside them. */
   --radius-control: 0.5rem; /* 8 */
   --radius-action: 0.875rem; /* 14 */
-  --radius-card: 1rem; /* 16 */
+  --radius-well: 1rem; /* 16 — the waveform well inside a card */
+  --radius-card: 1.375rem; /* 22 — SoundCard in the app */
+
+  /* ---------- Depth ----------
+     The app's SoundCard shadow: offset 8, radius 20, 24% of backgroundDeep.
+     The only shadow on the site. */
+  --shadow-card: 0 8px 20px rgb(7 8 6 / 0.24);
 
   /* ---------- Motion ---------- */
   --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
@@ -104,8 +123,23 @@
 @layer base {
   /* Anchor jumps stay instant: Chrome strands css smooth scrolling near the
      top of these prerendered pages, which silently breaks every TOC link. */
+  /* The app paints every screen with AppGradients.screen, top to bottom:
+     backgroundRaised → background → backgroundDeep. Here the page is the
+     screen, so the same three stops run its full height — raised behind the
+     header and hero, flat canvas through the middle, deep under the footer.
+     Percent stops keep it seamless at any page length; no fixed attachment,
+     which iOS Safari ignores. */
   html {
+    min-height: 100%;
     background-color: var(--color-canvas);
+    background-image: linear-gradient(
+      180deg,
+      var(--color-canvas-raised) 0%,
+      var(--color-canvas) 25%,
+      var(--color-canvas) 75%,
+      var(--color-canvas-deep) 100%
+    );
+    background-repeat: no-repeat;
     -webkit-text-size-adjust: 100%;
     color-scheme: dark;
   }
@@ -114,7 +148,7 @@
     margin: 0;
     min-width: 320px;
     overflow-x: clip;
-    background-color: var(--color-canvas);
+    background-color: transparent;
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: var(--text-body);
@@ -156,8 +190,10 @@
     outline-color: var(--color-paper-ink);
   }
 
-  /* Weight is capped at 500 everywhere, including <strong> and <b>. Hierarchy
-     comes from size, colour and space — never from a heavier cut. */
+  /* Headings are bold, as every title in the app is (Outfit-Bold in
+     Typography.ts). Body stays 400, actions and labels 500. Tracking follows
+     the app's ratios: -0.3px on a 24px title, -0.8px on the 34px sign-in
+     title. */
   h1,
   h2,
   h3,
@@ -168,7 +204,7 @@
   b,
   dt,
   th {
-    font-weight: 500;
+    font-weight: 700;
   }
 
   h1,
@@ -176,11 +212,11 @@
   h3,
   h4 {
     text-wrap: balance;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.02em;
   }
 
   h1 {
-    letter-spacing: -0.05em;
+    letter-spacing: -0.025em;
   }
 
   p {
@@ -197,7 +233,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-caption);
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em; /* the app's eyebrow: JetBrains Mono, 1.4px at 12px */
   line-height: 1.6;
   text-transform: uppercase;
 }
@@ -291,6 +327,7 @@
 }
 
 @media print {
+  html,
   body {
     background: #fff;
     color: #000;

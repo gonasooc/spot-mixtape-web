@@ -1,3 +1,4 @@
+import { BrandMark } from "@/components/BrandMark";
 import { Reveal, stagger } from "@/components/Reveal";
 import { Waveform } from "@/components/Waveform";
 import { ButtonAnchor, ButtonLink, Section, SectionLabel } from "@/components/ui";
@@ -68,7 +69,7 @@ function HeroActions() {
 function SoundCard() {
   return (
     <div
-      className="enter mx-auto mt-12 w-full max-w-xl rounded-card bg-surface p-6 sm:p-8"
+      className="enter mx-auto mt-12 w-full max-w-xl rounded-card border border-line bg-surface p-6 shadow-card sm:p-8"
       style={{ animationDelay: "240ms" }}
     >
       <div className="eyebrow flex items-center justify-between gap-4 text-faint">
@@ -79,7 +80,10 @@ function SoundCard() {
         </span>
       </div>
 
-      <Waveform className="my-6 h-24 sm:my-7 sm:h-28" progress={0.55} animated />
+      {/* The app draws the bars in an 80px canvas-coloured well, 12px inset. */}
+      <div className="my-6 rounded-well bg-canvas px-3 py-2.5 sm:my-7">
+        <Waveform className="h-15" progress={0.55} animated />
+      </div>
 
       <dl className="grid grid-cols-3 gap-5">
         {CARD_META.map((item) => (
@@ -101,9 +105,12 @@ export function Landing() {
       <section className="flex min-h-[calc(100svh-3.25rem)] flex-col justify-center px-5 py-16 sm:min-h-[calc(100svh-3.75rem)] sm:px-6 sm:py-20">
         <div className="mx-auto w-full max-w-content">
           <div className="mx-auto max-w-hero text-center">
-            <SectionLabel className="enter text-faint">
-              iOS · Android 사운드 아카이브
-            </SectionLabel>
+            {/* The app's sign-in lockup: record mark, then the tagline in mono
+                caps. 88px on desktop and 72px compact are its two sizes. */}
+            <BrandMark className="enter mx-auto size-18 sm:size-22" />
+            <p className="enter eyebrow mt-6 mb-0 text-muted">
+              Sound Archive for Places
+            </p>
 
             <h1
               className="enter mt-5 text-hero"
@@ -141,7 +148,7 @@ export function Landing() {
               key={item.step}
               as="article"
               delay={stagger(index)}
-              className="rounded-card bg-surface p-6 sm:p-7"
+              className="rounded-card border border-line bg-surface p-6 shadow-card sm:p-7"
             >
               <span className="eyebrow text-faint">{item.step}</span>
               <h3 className="mt-3 text-subtitle">{item.title}</h3>
@@ -194,9 +201,11 @@ export function Landing() {
           <p className="mt-4 mb-0 max-w-copy text-label text-muted sm:text-control">
             제품 문의도, 개인정보와 계정 삭제 요청도 같은 주소로 받습니다.
           </p>
+          {/* 29 mono characters plus padding is 305px; a 320px screen has
+              280px. One step down keeps the address on one line there. */}
           <ButtonAnchor
             href={`mailto:${site.supportEmail}`}
-            className="mt-8 font-mono"
+            className="mt-8 font-mono max-sm:text-meta"
           >
             {site.supportEmail}
           </ButtonAnchor>

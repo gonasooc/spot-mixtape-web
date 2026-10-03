@@ -1,10 +1,14 @@
 /**
- * Candle-style waveform bars, the same visual language the app uses on sound
- * cards. Heights are a fixed sequence so server and client render identically.
+ * Waveform bars drawn the way the app's WaveformDisplay draws them: 40 bars,
+ * 3px wide with 2px corners, spread edge to edge, played bars in acid and the
+ * rest in the app's `dim` grey. Heights are a fixed sequence so server and
+ * client render identically; the range mirrors the app's 8–52px bars inside
+ * a 60px strip.
  */
 const HEIGHTS = [
-  22, 46, 74, 34, 88, 54, 28, 66, 94, 42, 72, 31, 58, 84, 38, 68, 26, 52, 79,
-  44, 62, 30, 86, 48,
+  22, 46, 74, 34, 86, 54, 28, 66, 80, 42, 72, 31, 58, 84, 38, 68, 26, 52, 79,
+  44, 62, 30, 87, 48, 36, 70, 24, 60, 82, 40, 56, 76, 33, 64, 20, 50, 78, 45,
+  29, 58,
 ];
 
 interface WaveformProps {
@@ -19,7 +23,7 @@ interface WaveformProps {
 export function Waveform({
   bars = HEIGHTS.length,
   progress = 1,
-  className = "h-28",
+  className = "h-15",
   animated = false,
 }: WaveformProps) {
   const visible = HEIGHTS.slice(0, bars);
@@ -28,14 +32,14 @@ export function Waveform({
   return (
     <div
       aria-hidden="true"
-      className={`flex items-center justify-between gap-[3px] ${className}`}
+      className={`flex items-center justify-between ${className}`}
     >
       {visible.map((height, index) => (
         <span
           key={index}
           className={[
-            "w-full max-w-[10px] flex-1 rounded-full",
-            index < playedCount ? "bg-acid" : "bg-acid/20",
+            "w-0.75 shrink-0 rounded-xs",
+            index < playedCount ? "bg-acid" : "bg-dim",
             animated ? "bar-pulse" : "",
           ].join(" ")}
           style={{

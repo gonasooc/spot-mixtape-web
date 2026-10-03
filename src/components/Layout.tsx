@@ -17,9 +17,9 @@ function SiteHeader() {
       <div className="mx-auto flex h-full max-w-content items-center gap-4 px-5 sm:px-6">
         <Link
           to="/"
-          className="flex shrink-0 items-center gap-2.5 font-display text-lead font-medium tracking-[-0.04em] text-ink no-underline sm:text-subtitle"
+          className="flex shrink-0 items-center gap-2.5 font-display text-lead font-bold tracking-normal text-ink no-underline sm:text-subtitle"
         >
-          <BrandMark className="size-5 text-acid" />
+          <BrandMark className="size-6" />
           spotMixtape
         </Link>
 
@@ -59,7 +59,7 @@ function SiteFooter() {
   return (
     <footer className="px-5 pt-10 pb-8 text-caption text-faint sm:px-6">
       <div className="mx-auto flex max-w-content flex-wrap items-center gap-x-5 gap-y-3">
-        <span className="font-display text-label font-medium text-ink">
+        <span className="font-display text-label font-bold text-ink">
           {site.appName}
         </span>
 

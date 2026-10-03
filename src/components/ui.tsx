@@ -10,7 +10,8 @@ type ActionTone = "primary" | "secondary";
 
 const TONE_CLASSES: Record<ActionTone, string> = {
   primary: "bg-acid text-canvas hover:bg-acid-bright",
-  secondary: "bg-chip text-ink hover:bg-chip-hover",
+  // The app's secondary action: surfaceElevated with a 1px borderStrong edge.
+  secondary: "border border-line-strong bg-chip text-ink hover:bg-chip-hover",
 };
 
 const SIZE_CLASSES = {

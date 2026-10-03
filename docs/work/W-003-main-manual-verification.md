@@ -37,7 +37,7 @@
 공유 자산:
 
 - [ ] OG 이미지 1200×630 PNG 제작 여부 결정, 만들면 `public/`에 넣고 `buildHead()`에 `og:image` 절대 URL 추가 + `twitter:card`를 `summary_large_image`로
-- [ ] `apple-touch-icon` 180×180 PNG 제작, `index.html` 교체
+- [x] `apple-touch-icon` 180×180 PNG 제작, `index.html` 교체 — 2026-10-04 [W-004](W-004-main-app-brand-alignment.md)에서 앱 `icon.png`를 리사이즈해 넣었고 48px `favicon.png`도 함께 추가
 
 사람이 직접 확인:
 
