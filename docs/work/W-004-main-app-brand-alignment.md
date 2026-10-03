@@ -1,6 +1,6 @@
 # W-004 · 앱 기준으로 브랜드 요소 통일
 
-- 상태: 진행 중
+- 상태: 완료
 - 최근 갱신: 2026-10-04
 - 관련 문서: [docs/design.md](../design.md), [docs/README.md](../README.md)
 
@@ -52,6 +52,8 @@
 
 - 2026-10-04 · Claude Code — 요소 통일(마크·아이콘·색·파형·카드·워드마크)과 (a) 원리 통일(제목 700·카드 그림자·화면 그라데이션)을 모두 적용하고 검증했습니다. design.md 합의 기준 개정 포함. 커밋하지 않았습니다. 다음 행동은 사용자 검토 → 커밋.
 
+- 2026-10-04 · Claude Code — 완료로 닫음. 완료 조건(레코드 마크, 앱 `Colors.ts` 토큰, 파형·카드 치수, 제목 700, 카드 그림자, html 그라데이션, 빌드·네 폭 넘침 0건)을 충족했고 `b351398`이 원격에 있습니다. 후속은 [W-005](W-005-main-app-feel.md).
+
 ## 남은 일
 
 - [x] 앱 아이콘·로그인 마크·색·파형·카드·버튼 치수 측정
@@ -68,6 +70,6 @@
 - [x] 한국어 제목 굵기 결정 (사용자) — (a) 선택, 700
 - [x] (a) 적용 — 제목 700, `--shadow-card`, `html` 화면 그라데이션, `canvas-deep` 토큰, design.md 합의 기준 개정
 - [x] (a) 검증 — 빌드, 굵기·그림자·그라데이션 computed, 네 폭 넘침, 데스크톱·모바일·법률 페이지 화면
-- [ ] 사용자 검토 후 커밋
+- [x] 사용자 검토 후 커밋 — `b351398`, 2026-10-04 푸시
 
-재개에 필요한 코드 상태: 브랜치 `main`, 미커밋 변경 있음 (`src/styles.css`, `src/components/{BrandMark,Waveform,Layout,ui}.tsx`, `src/pages/Landing.tsx`, `index.html`, `public/{favicon.svg,favicon.png,apple-touch-icon.png}`, `README.md`, `docs/design.md`, `docs/README.md`, `docs/work/W-003`, 이 문서).
+재개에 필요한 코드 상태: 해당 없음 — `b351398`로 커밋·푸시됐습니다.

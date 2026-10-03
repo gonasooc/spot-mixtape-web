@@ -25,6 +25,7 @@
   - `style-src 'self'`가 인라인 `style` 속성을 차단합니다. 프리렌더된 랜딩에 27건 있고([src/components/Waveform.tsx](../../src/components/Waveform.tsx)의 막대 높이, 히어로의 `animation-delay`, [src/components/Reveal.tsx](../../src/components/Reveal.tsx)의 전환값), 파형 막대의 computed height가 전부 `0px`가 됩니다.
   - `font-src 'self'`가 Vite가 base64로 인라인한 `data:` 폰트 1건을 차단합니다. `@font-face` 100개 중 1개입니다.
 - 2026-10-04 — 따라서 "헤더를 살리는 호스트로 옮긴다"는 선택지는 단독으로 성립하지 않습니다. 이전보다 CSP 수정이 먼저입니다.
+- 2026-10-04 — 재측정. [W-005](W-005-main-app-feel.md)에서 손으로 그린 히어로 카드가 실제 스크린샷으로 바뀌며 랜딩의 인라인 `style`은 27건 → **3건**(히어로 `enter` 애니메이션의 `animation-delay`)이 됐습니다. 404 페이지의 파형 막대(40건, 높이 인라인)와 `Reveal`이 런타임에 주는 전환값은 남아 있습니다. `data:` 폰트는 `assetsInlineLimit: 0`으로 0건입니다. CSP를 켜기 위해 손볼 범위가 크게 줄었습니다.
 
 ### 선택지
 
@@ -49,7 +50,7 @@
 - [x] 라이브 응답에 보안 헤더가 붙는지 확인
 - [x] `_headers`의 CSP를 켰을 때 깨지는 것 측정
 - [ ] 호스팅 방침 결정 (OWNER)
-- [ ] 인라인 `style` 27건을 CSS 변수나 클래스로 옮길지 결정하고 적용
+- [ ] 남은 인라인 `style`을 CSS 변수나 클래스로 옮길지 결정하고 적용 — 랜딩 3건(히어로 `animation-delay`), 404의 파형 막대 40건, `Reveal` 런타임 전환값 (2026-10-04 재측정, 원래 27건)
 - [x] `build.assetsInlineLimit: 0`으로 `data:` 폰트 제거 — 2026-10-04 [W-005](W-005-main-app-feel.md)에서 적용, 빌드 CSS의 `data:` 폰트 0건 확인
 - [ ] 수정한 CSP로 다시 측정해 위반 0건 확인
 - [ ] 방침에 맞게 `public/_headers`를 살리거나 지우고, [docs/architecture.md](../architecture.md)의 알려진 구조 제약을 갱신

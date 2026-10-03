@@ -43,9 +43,9 @@
 
 - [ ] `spotmixtape.contact@gmail.com`으로 실제 테스트 메일을 보내 수신 확인
 - [ ] 계정 삭제 요청 mailto 링크가 제목·본문 템플릿과 함께 열리는지 확인 (`deletionRequestMailto`)
-- [ ] 로그아웃·시크릿 브라우저에서 네 페이지 열람
+- [x] 로그아웃·시크릿 브라우저에서 네 페이지 열람 — 불필요: 이 사이트에는 로그인이 없고 세션에 따라 달라지는 요소도 없다. 2026-10-04 비인증 `curl`로 라이브 `/`, `/privacy`, `/privacy/`, `/privacy.html`, `/terms`, `/account-deletion` 모두 200
 - [ ] 모바일 실기기에서 랜딩·개인정보처리방침 스크롤과 목차 앵커 동작 확인
-- [ ] 계정 삭제 안내가 로그인 없이, 앱 설치 없이 열리는지 스토어 심사 기준으로 확인
+- [x] 계정 삭제 안내가 로그인 없이, 앱 설치 없이 열리는지 스토어 심사 기준으로 확인 — 2026-10-04 비인증 `curl`로 `/account-deletion` 200(정적 meta refresh 스텁 → `/privacy#account-deletion`), 방침 8장 '계정 삭제'가 프리렌더된 HTML에 포함. 앱 없이 읽힌다
 - [ ] VoiceOver·TalkBack으로 건너뛰기 링크와 목차 확인
 
 재개에 필요한 코드 상태: 브랜치 `main`. 소스 변경 없음.
