@@ -44,7 +44,17 @@ src/
 - **`src/basePath.ts`는 `./config/site`를 상대경로로 import한다.** `vite.config.ts`가 자기 alias를 해석하는 중에 이 모듈을 읽기 때문에 `@` alias를 쓸 수 없다. 이 import를 alias로 바꾸면 빌드가 깨진다.
 - **배포 서브패스는 `site.publicOrigin` 하나에서만 파생한다.** Vite `base`, 라우터 basename, 리다이렉트 스텁이 전부 `basePath`를 거친다. 호스트를 옮길 때 고칠 값은 `publicOrigin` 하나여야 한다.
 - **브라우저가 직접 해석하는 절대 경로에는 `withBasePath()`를 쓴다.** 라우터를 거치지 않는 meta refresh 스텁의 목적지가 그렇다. 빠뜨리면 서브패스 배포에서 그 URL만 깨진다.
-- **프리렌더 출력 계약을 바꾸지 않는다.** 앱의 `src/utils/legalUrls.ts`가 `privacy.html`, `terms.html`, `account-deletion.html`을 하드코딩하고 스토어 콘솔에도 같은 URL이 등록돼 있다. 워크플로의 필수 페이지 검사가 이 계약을 지킨다.
+- **프리렌더 출력 계약을 바꾸지 않는다.** 앱의 `src/utils/legalUrls.ts`가 아래 경로를 하드코딩하고 스토어 콘솔에도 같은 URL이 등록돼 있다. 워크플로의 필수 페이지 검사가 이 계약을 지킨다.
+
+  | 앱의 `LegalPage` | 앱이 만드는 경로 | 이 사이트의 대응 파일 |
+  | --- | --- | --- |
+  | `privacy` | `/privacy.html` | `dist/privacy.html` |
+  | `terms` | `/terms.html` | `dist/terms.html` |
+  | `accountDeletion` | `/account-deletion.html` | `dist/account-deletion.html` — `/privacy#account-deletion`로 보내는 스텁 |
+  | `support` | `/` | `dist/index.html` |
+
+  앱의 `getLegalPageUrl()`은 base URL을 검증한다. HTTPS여야 하고, 인증정보·쿼리·프래그먼트가 없어야 하며, `.html`로 끝나거나 `localhost`·`.test`·`example.com` 호스트면 거절한다. 하위 경로는 받고 끝 슬래시 유무는 정규화한다.
+- **법률 문서의 장을 추가·삭제하면 목차 번호를 함께 맞춘다.** `src/pages/Privacy.tsx`의 `SECTIONS` 배열과 각 `PolicySection`의 `index`가 따로 있어, 한쪽만 고치면 목차와 본문 번호가 어긋난다.
 - **색인 여부는 `routes.ts`가 단독으로 판단한다.** 개별 페이지에서 robots 메타를 따로 쓰지 않는다. 프리렌더와 `useDocumentMeta`가 같은 값을 쓴다.
 
 ## 알려진 구조 제약

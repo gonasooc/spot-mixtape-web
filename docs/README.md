@@ -20,16 +20,16 @@
 
 UI를 추가·수정·검토하기 전에 관련 부분을 확인합니다.
 
-## 기존 문서
+## 그 밖의 문서
 
-- [docs/REMAINING_WORK.md](REMAINING_WORK.md): 배포까지 필요한 입력값, 법률 검토 항목, 검증 기준의 원래 목록
-- [README.md](../README.md): 저장소 소개, 페이지 목록, 설치와 실행
+- [README.md](../README.md): 저장소 소개, 페이지 목록, 설치와 실행, 법률 값 현황
 - [PRODUCT.md](../PRODUCT.md): 브랜드 톤과 안티레퍼런스의 원본
-
-`REMAINING_WORK.md`는 "플레이스홀더 9개 남음, 배포 불가, 호스트 미정, CI 없음" 시점에 쓰인 문서로, 현재 코드와 어긋나는 항목이 많습니다. 실제로는 법률 값이 모두 채워졌고, GitHub Pages로 배포됐으며, 변호사 검토는 생략하기로 결정됐습니다. 차이는 [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md)에 정리돼 있습니다. 이 문서를 근거로 삼기 전에 현재 코드와 대조하세요.
+- 앱 저장소 `spot-mixtape`의 `docs/RELEASE_RUNBOOK.md`: 출시 전체 절차의 정본. 스토어 콘솔 입력 상태와 OWNER 결정 기록이 여기 있습니다
 
 ## 진행 중·예정·보류 작업
 
+- [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md) — 보안 헤더 방침과 CSP 대응 — 보류 (OWNER 결정 대기)
+- [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md) — 사람이 확인해야 할 항목과 공유 자산 — 예정
 - [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md) — 문서 구조 적용과 현황 파악 — 진행 중
 
 새 작업은 [docs/work/_template.md](work/_template.md)를 복사한 뒤 이 목록에 상대경로 링크를 추가합니다. 상태는 `예정`, `진행 중`, `보류`, `완료`를 사용합니다.

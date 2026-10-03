@@ -50,9 +50,11 @@ pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 �
 
 ## 현황과 잔여 작업
 
-현재 상황과 진행 중인 작업 목록은 [docs/README.md](./docs/README.md)에 있다.
+현재 상황과 진행 중인 작업 목록은 [docs/README.md](./docs/README.md)에 있다. 제품 범위와 아직 결정하지 않은 사항은 [docs/plan.md](./docs/plan.md)에, 개별 작업의 상태는 `docs/work/`에 있다.
 
-[docs/REMAINING_WORK.md](./docs/REMAINING_WORK.md)는 배포 전에 작성한 입력값·법률 검토·검증 기준의 원래 목록이다. 지금은 값이 모두 확정되고 GitHub Pages에 배포된 상태라 어긋나는 항목이 많으므로, 근거로 쓰기 전에 현재 코드와 대조한다. 차이는 [docs/work/W-001-main-docs-structure.md](./docs/work/W-001-main-docs-structure.md)에 정리돼 있다.
+출시 전체 절차는 앱 저장소의
+[RELEASE_RUNBOOK.md](https://github.com/gonasooc/spot-mixtape/blob/main/docs/RELEASE_RUNBOOK.md)를
+따른다. 스토어 콘솔 입력 상태와 OWNER 결정 기록은 그 문서가 정본이다.
 
 ## 법률 값 관리
 

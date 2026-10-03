@@ -36,7 +36,7 @@
 | 준비 | `pnpm install` | Node `>=20.19.0`, pnpm `10.33.1` |
 | 실행 | `pnpm dev` | 개발 서버. 프리렌더가 없으므로 빈 루트에 마운트된다 |
 | 테스트 | 해당 없음 | 테스트 러너를 도입하지 않았다 |
-| 정적 검사·빌드 | `pnpm typecheck` (`tsc -b`) / `pnpm build` | `build`는 토큰 검사 → 타입체크 → 클라이언트 → SSR → 프리렌더 순으로 돈다 |
+| 정적 검사·빌드 | `pnpm typecheck` (`tsc -b`) / `pnpm build` | `build`는 토큰 검사 → 타입체크 → 클라이언트 → SSR → 프리렌더 순으로 돈다. 산출물은 `dist/` |
 | 법률 값 검사 | `pnpm config:check` | 미교체 플레이스홀더가 있으면 exit 1 |
 | 디자인 토큰 검사 | `pnpm tokens:check` | 한 이름이 두 네임스페이스에 있으면 exit 1. `build`가 먼저 실행한다 |
 | 배포 결과 확인 | `pnpm preview` | 프리렌더된 파일이 있는 경로만 200을 반환한다 |
@@ -44,8 +44,29 @@
 ### 통과 기준
 
 - `pnpm build`가 `⚠️ placeholder` 경고 없이 끝나고 `prerender: wrote 8 pages + sitemap.xml + robots.txt`를 출력한다.
-- 배포본에서 `/`, `/privacy`, `/privacy/`, `/privacy.html`, `/terms`, `/account-deletion`이 200이고, 없는 경로가 404다.
 - UI를 바꿨다면 [docs/design.md](design.md)의 디자인 확인 방법을 따른다.
+
+### 배포 후 확인
+
+```bash
+ORIGIN=https://gonasooc.github.io/spot-mixtape-web
+
+# 확장자 유무 양쪽이 모두 200인지
+for p in / /privacy /privacy/ /privacy.html /terms /account-deletion; do
+  curl -s -o /dev/null -w "%{http_code} $p\n" "$ORIGIN$p"
+done
+
+# 없는 경로가 404인지 (404.html 렌더)
+curl -s -o /dev/null -w "%{http_code}\n" "$ORIGIN/nope"
+
+# sitemap·robots의 origin이 실제 값인지
+curl -s "$ORIGIN/sitemap.xml" "$ORIGIN/robots.txt"
+
+# 보안 헤더 — 현재 호스트에서는 아무것도 나오지 않는 것이 정상이다
+curl -sI "$ORIGIN/privacy" | grep -i "content-security-policy\|x-frame-options\|permissions-policy"
+```
+
+사람이 직접 확인해야 하는 것은 [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md)에서 관리한다.
 
 ### 환경 변수
 
