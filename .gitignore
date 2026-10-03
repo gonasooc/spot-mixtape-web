@@ -8,3 +8,9 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# 운영체제의 메타데이터
+Thumbs.db
+
+# 공유하지 않는 세션 원문과 개인 메모
+docs/.local/
