@@ -43,9 +43,10 @@ pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 �
 
 ## 디자인 기준
 
-색·서체·간격·모션·문구 규칙과 그 근거는 [DESIGN.md](./DESIGN.md)에 있다. 토큰의 기준
-파일은 `src/styles.css`의 `@theme` 하나이며, 컴포넌트에 임의 색값이나 임의 크기를 쓰지
-않는다. `pnpm tokens:check`가 색과 글자 크기 네임스페이스의 이름 충돌을 빌드 전에 잡는다.
+색·서체·간격·모션·문구 규칙과 그 근거는 [docs/design.md](./docs/design.md)에 있다. 토큰의
+기준 파일은 `src/styles.css`의 `@theme` 하나이며, 컴포넌트에 임의 색값이나 임의 크기를
+쓰지 않는다. `pnpm tokens:check`가 색과 글자 크기 네임스페이스의 이름 충돌을 빌드 전에
+잡는다.
 
 ## 현황과 잔여 작업
 

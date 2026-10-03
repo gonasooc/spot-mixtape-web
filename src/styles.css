@@ -18,7 +18,7 @@
   `pnpm tokens:check` guards the one trap here: a name declared in two
   namespaces makes its utility unreachable in one of them, silently.
 
-  See DESIGN.md for the rules these tokens exist to enforce.
+  See docs/design.md for the rules these tokens exist to enforce.
 */
 @theme {
   /* ---------- Dark shell ---------- */
