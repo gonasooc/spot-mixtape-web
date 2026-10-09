@@ -1,12 +1,12 @@
 # W-002 · 보안 헤더 방침과 CSP 대응
 
-- 상태: 진행 중
+- 상태: 완료
 - 최근 갱신: 2026-10-09
 - 관련 문서: [docs/architecture.md](../architecture.md), [docs/plan.md](../plan.md), [docs/design.md](../design.md)
 
 ## 현재 상황
 
-2026-10-09 OWNER가 **GitHub Pages 유지 + meta CSP**로 결정했습니다. CSP와 Referrer-Policy가 빌드된 모든 페이지의 `<meta>`로 들어가고, 그 정책에 걸리던 인라인 style 43건은 클래스·SVG 속성으로 옮겼으며, 효력 없던 `public/_headers`는 지웠습니다. 로컬 빌드에서 전 페이지 위반 0건과 실제 집행을 확인했습니다. 남은 것은 배포 뒤 라이브 확인뿐입니다.
+2026-10-09 OWNER가 **GitHub Pages 유지 + meta CSP**로 결정했습니다. CSP와 Referrer-Policy가 빌드된 모든 페이지의 `<meta>`로 들어가고, 그 정책에 걸리던 인라인 style 43건은 클래스·SVG 속성으로 옮겼으며, 효력 없던 `public/_headers`는 지웠습니다. `a428cc3`로 배포해 라이브에서도 전 페이지 위반 0건과 실제 집행을 확인했습니다.
 
 - 완료 조건: 호스팅 방침이 정해지고, 그 방침에서 의도한 헤더가 실제 응답에 붙거나, 붙이지 않기로 한 이유가 문서에 남는다. 결정된 방침(meta CSP)에서는 라이브 HTML에 정책이 들어 있고 위반이 0건이며, 헤더 전용 보호를 포기한 이유가 문서에 남는 것.
 - 사람이 판단할 사항: 없음.
@@ -53,12 +53,17 @@
   - 집행 확인: style 속성 주입과 인라인 `<script>` 삽입이 둘 다 막히고 `style-src-attr`·`script-src-elem` 위반으로 보고됨. (CDP로 실행한 `eval`은 DevTools 코드라 CSP를 받지 않아 시험 방법으로 쓰지 않았습니다)
   - 정상 동작: 히어로 지연 `0s,0s,0.06s,0.12s,0.24s`, Reveal 10/10 등장(지연 5개 CSSOM 적용), 이미지 5/5, 글꼴 3종, 그레인(`data:` SVG) 적용, 404 파형 40개(22% → 12.3px), 콘솔 에러 0
   - 개발 서버: meta CSP 없음(의도), 렌더·순차 등장 정상, 예외 0
-- 라이브 확인 — 미실행(배포 전)
+- 라이브 확인(2026-10-09, `a428cc3` 배포 81초 뒤, 헤드리스 Chrome 152 + CDP, 페이지마다 새 브라우저)
+  - [docs/specs.md](../specs.md)의 배포 후 확인: 여섯 URL 200, `/nope` 404, 지운 `/_headers`도 404, 모든 페이지(리다이렉트 스텁 포함)의 HTML에 CSP·referrer `<meta>`
+  - `/`, `/privacy`, `/terms`, `/nope`(404 페이지), `/account-deletion`(→ `/privacy#account-deletion`): 로드 시 위반 0건, style 속성·인라인 `<script>` 주입 차단, 랜딩 → 개인정보처리방침 SPA 이동 중 위반 0건
+  - 히어로 지연 `0s,0s,0.06s,0.12s,0.24s`, Reveal 10/10, 이미지 5/5, 글꼴 3종, 그레인, 404 파형 40개(12.3px) 모두 정상
+  - 콘솔 에러는 `/nope`의 1건뿐이고, 문서 자체의 404 상태를 브라우저가 기록한 것(설계대로)
 
 ### 세션 메모
 
 - 2026-10-04 · Claude Code(Opus 5) — 측정만 하고 보류했습니다. 다음 행동은 OWNER의 호스팅 결정.
 - 2026-10-09 · Claude Code(Opus 5.5) — 결정(Pages + meta CSP)을 받아 인라인 style 제거·meta CSP·`_headers` 삭제·문서 정정까지 하고 로컬에서 검증했습니다. 커밋하지 않았습니다. 다음 행동은 커밋·푸시 뒤 라이브 확인.
+- 2026-10-09 · Claude Code(Opus 5.5) — 사용자 승인으로 `a428cc3` 커밋·푸시, 배포 뒤 라이브 확인까지 마쳐 완료로 닫았습니다.
 
 ## 남은 일
 
@@ -69,6 +74,6 @@
 - [x] `build.assetsInlineLimit: 0`으로 `data:` 폰트 제거 — 2026-10-04 [W-005](W-005-main-app-feel.md)에서 적용, 빌드 CSS의 `data:` 폰트 0건 확인
 - [x] 수정한 CSP로 다시 측정해 위반 0건 확인 — 2026-10-09 로컬, meta CSP로 전 페이지 0건, 집행 확인
 - [x] 방침에 맞게 `public/_headers`를 살리거나 지우고, [docs/architecture.md](../architecture.md)의 알려진 구조 제약을 갱신 — 지움. README·architecture·specs·design·plan 정정
-- [ ] 배포 뒤 라이브 HTML에 meta CSP가 있는지, 라이브에서 위반이 0건인지 확인
+- [x] 배포 뒤 라이브 HTML에 meta CSP가 있는지, 라이브에서 위반이 0건인지 확인 — 2026-10-09 `a428cc3`, 전 페이지 0건
 
-재개에 필요한 코드 상태: 브랜치 `main`, 기준 커밋 `fc20701`. 미커밋 변경 — `scripts/prerender.mjs`, `src/styles.css`, `src/components/Waveform.tsx`, `src/pages/Landing.tsx`, `public/_headers` 삭제, README·docs.
+재개에 필요한 코드 상태: 해당 없음 — `a428cc3`로 커밋·푸시·배포됐습니다.

@@ -6,7 +6,7 @@
 
 디자인은 2026-10-04에 앱 저장소를 기준으로 맞춰 라이브에 올라갔습니다 — 레코드 마크와 앱 팔레트, 볼드 제목과 카드 그림자, Gothic A1, 64/96px 리듬, 실제 앱 화면이 들어간 히어로와 카드([W-004](work/W-004-main-app-brand-alignment.md), [W-005](work/W-005-main-app-feel.md)).
 
-2026-10-09 OWNER 결정에 따라 GitHub Pages에 남은 채 보안 정책을 meta CSP로 걸었고, 공유 미리보기용 OG 이미지도 만들었습니다(둘 다 배포 대기). 남은 것은 배포 뒤 라이브 확인([W-002](work/W-002-main-security-headers.md))과, 사람이 해야 하는 확인 — 실제 메일 수신, mailto 링크, 실기기, 스크린리더, 공유 미리보기([W-003](work/W-003-main-manual-verification.md))입니다.
+2026-10-09에는 OWNER 결정에 따라 GitHub Pages에 남은 채 보안 정책을 meta CSP로 걸었고([W-002](work/W-002-main-security-headers.md)), 공유 미리보기용 OG 이미지를 만들어 배포했습니다(`a428cc3`). 공유 미리보기·실기기·스크린리더도 사람이 직접 확인해([W-003](work/W-003-main-manual-verification.md)), 지금 열린 작업은 없습니다. 아직 결정하지 않은 사항(우편 주소 생략의 법적 충분성, 커스텀 도메인 등)은 [docs/plan.md](plan.md)에 있습니다.
 
 ## 기본 문서
 
@@ -30,13 +30,14 @@ UI를 추가·수정·검토하기 전에 관련 부분을 확인합니다.
 
 ## 진행 중·예정·보류 작업
 
-- [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md) — 보안 헤더 방침과 CSP 대응 — 진행 중 (배포 뒤 라이브 확인만 남음)
-- [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md) — 사람이 확인해야 할 항목과 공유 자산 — 진행 중 (사람 확인만 남음)
+진행 중인 작업이 없습니다.
 
 새 작업은 [docs/work/_template.md](work/_template.md)를 복사한 뒤 이 목록에 상대경로 링크를 추가합니다. 상태는 `예정`, `진행 중`, `보류`, `완료`를 사용합니다.
 
 ## 최근 완료
 
+- [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md) — OG 이미지, 공유 미리보기·실기기·스크린리더 확인 — 2026-10-09, `a428cc3`
+- [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md) — 보안 정책: GitHub Pages 유지 + meta CSP, `_headers` 삭제 — 2026-10-09, `a428cc3`
 - [docs/work/W-005-main-app-feel.md](work/W-005-main-app-feel.md) — 랜딩을 앱의 결로: 리듬·서체·색 폭·밀도, 앱 스크린샷 — 2026-10-04, `38f2623`
 - [docs/work/W-004-main-app-brand-alignment.md](work/W-004-main-app-brand-alignment.md) — 앱 기준으로 브랜드 요소 통일, 제목 700·그림자·그라데이션 — 2026-10-04, `b351398`
 - [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md) — docs-starter 구조 적용, README 정정, REMAINING_WORK 분배 — 2026-10-04, `2c45206`·`84d6273`·`a3452ca`

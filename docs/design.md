@@ -37,7 +37,7 @@ UI의 시각적 기준과 상호작용·반응형·접근성 기준을 다룹니
 - `prefers-reduced-motion: reduce`에서 숨겨진 요소 0건, 파형 반복 애니메이션도 정지
 - 외부 네트워크 요청 0건. 랜딩 18요청·516KB, 개인정보처리방침 20요청·573KB(캐시 없는 첫 방문)
 
-측정하지 않은 것: 실제 브라우저 수동 조작, VoiceOver·TalkBack, 실기기 스크롤, Lighthouse, 인쇄 출력.
+측정하지 않은 것: Lighthouse, 인쇄 출력. 실기기 스크롤·목차 앵커와 스크린리더(건너뛰기 링크·목차)는 2026-10-09 사람이 직접 확인했습니다 — 기기 종류는 기록되지 않았습니다([docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md)).
 
 2026-10-04 브랜드 통일([docs/work/W-004-main-app-brand-alignment.md](work/W-004-main-app-brand-alignment.md)) 뒤 재측정: 320·390·768·1440px에서 랜딩·404 가로 넘침 0건(320px 문의 이메일 버튼 넘침 5px을 함께 고침), 헤더 마크 24px·히어로 마크 72/88px, 워드마크 Outfit 700, 파형 40개·3px·모서리 2px, 카드 모서리 22px·1px 테두리 — 모두 computed style로 확인.
 
@@ -171,7 +171,6 @@ mono에 대문자와 0.12em 자간(앱 eyebrow의 12px 기준 1.4px)을 얹는 `
 
 - **woff 폴백이 산출물에 들어갑니다.** fontsource CSS가 woff2와 woff를 함께 선언해 Vite가 둘 다 내보내고(`dist/assets` 7.9MB, 594개), 브라우저는 woff2만 받습니다. 배포 artifact 크기만의 문제이며, 빌드 후 woff를 걷어낼지 미정입니다.
 - 카드 스택 맨 뒤 믹스테이프 커버의 violet은 보이는 띠가 12–15px라 거의 인지되지 않습니다. 앱 `WalletCardStack` 기하를 그대로 둔 결과이며, 더 보이게 할지 미정입니다.
-- 실기기 확인을 하지 않았습니다. 모바일 Safari의 sticky 헤더와 목차 앵커 동작은 미확인입니다.
 
 ## 디자인 확인 방법
 
@@ -182,8 +181,8 @@ UI를 바꾸면 다음을 확인합니다.
 3. 폭 320·390·768·1280px. 각 폭에서 `document.documentElement.scrollWidth`가 뷰포트 폭과 같은지 본다. 320px에서는 문의 이메일 버튼이 한 줄에 들어가는지도 본다. 헤드리스 Chrome의 `--window-size`는 500px 아래로 줄지 않으므로 모바일 폭은 CDP의 `Emulation.setDeviceMetricsOverride`로 잡는다. 전체 페이지를 `captureBeyondViewport`로 찍으면 고정 배치된 그레인이 첫 뷰포트 높이까지만 덮여 그 아래가 약 2단계 어둡게 나온다 — 배경 이음새가 아니라 캡처 한계이며, 뷰포트 높이를 바꿔 찍으면 경계가 따라 움직인다.
 4. 제목이 700이고 본문이 400인지, `document.fonts.check('700 1em "Gothic A1"')`이 true인지, 본문·라벨 대비가 AA를 넘는지 computed style로 확인한다. 카드에 `--shadow-card`가 붙고 `html`에 화면 그라데이션이 있는지 본다. 히어로 제목이 320px에서도 두 줄인지 본다.
 5. 히어로와 루프 카드의 `img` 다섯 개가 로드되고 비어 있지 않은 `alt`와 `width`/`height`가 있는지, 보관 카드의 분할 커버 두 칸이 같은 폭인지 본다.
-5. 키보드 Tab으로 건너뛰기 링크 → 내비 → 본문 링크 순서와 포커스 링 가시성을 어두운 섹션과 밝은 섹션 양쪽에서 본다. 아직 숨은 요소에 Tab이 닿으면 그 자리에서 드러나는지 함께 본다.
-6. `prefers-reduced-motion: reduce`에서 숨겨진 요소가 없는지, 파형이 멈추는지 본다.
-7. 프리렌더된 HTML에 `data-reveal`이 없고 본문 전체가 들어 있는지 본다.
+6. 키보드 Tab으로 건너뛰기 링크 → 내비 → 본문 링크 순서와 포커스 링 가시성을 어두운 섹션과 밝은 섹션 양쪽에서 본다. 아직 숨은 요소에 Tab이 닿으면 그 자리에서 드러나는지 함께 본다.
+7. `prefers-reduced-motion: reduce`에서 숨겨진 요소가 없는지, 파형이 멈추는지 본다.
+8. 프리렌더된 HTML에 `data-reveal`이 없고 본문 전체가 들어 있는지 본다.
 
 실제 확인 결과와 미확인 범위는 해당 작업 문서에 남깁니다.
