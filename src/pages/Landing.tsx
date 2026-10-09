@@ -106,10 +106,7 @@ function HeroActions() {
  */
 function CardStack() {
   return (
-    <div
-      className="enter relative mx-auto w-full max-w-72 pb-12 lg:mx-0 lg:ml-auto"
-      style={{ animationDelay: "240ms" }}
-    >
+    <div className="enter enter-delay-240 relative mx-auto w-full max-w-72 pb-12 lg:mx-0 lg:ml-auto">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-12 aspect-phone scale-90 rounded-card border border-line bg-linear-to-br from-violet via-surface to-canvas-deep opacity-70"
@@ -181,16 +178,13 @@ export function Landing() {
               Sound Archive for Places
             </p>
 
-            <h1
-              className="enter mt-5 text-hero"
-              style={{ animationDelay: "60ms" }}
-            >
+            <h1 className="enter enter-delay-60 mt-5 text-hero">
               그때 그곳의 소리를
               <br />
               <span className="text-acid">다시 꺼내 듣습니다.</span>
             </h1>
 
-            <div className="enter" style={{ animationDelay: "120ms" }}>
+            <div className="enter enter-delay-120">
               <p className="mt-6 mb-0 max-w-copy text-body text-muted sm:text-lead">
                 사진 한 장으로는 담기지 않는 순간이 있습니다. 그 장소의 10초를
                 사운드 카드로 남기고, 모아둔 카드를 믹스테이프로 이어 듣습니다.

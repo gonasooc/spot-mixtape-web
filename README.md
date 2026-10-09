@@ -65,8 +65,8 @@ pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 �
 
 - 위치: `src/assets/screenshots/{capture,library,listen,mixtape,share}.webp`, 720×1440(1:2).
   원본에서 폰 프레임(717×1427, 좌상단 182,407) 주위로 740×1480 상자(좌상단 170,380)를 잘라 줄인 것이다.
-  `src/assets/`에서 import하므로 Vite가 해시를 붙여 `/assets/`로 내보내고 1년 immutable 캐시를
-  탄다.
+  `src/assets/`에서 import하므로 Vite가 해시를 붙여 `/assets/`로 내보낸다. 내용이 바뀌면 파일명도
+  바뀌므로 캐시가 낡은 이미지를 붙잡지 않는다.
 - 갱신: 앱 저장소에서 PNG를 다시 만든 뒤 아래처럼 다시 자른다. 다섯 장의 프레임 위치는 같다.
 
   ```bash
@@ -79,6 +79,27 @@ pnpm tokens:check     # 디자인 토큰 이름 충돌 검사 (build가 먼저 �
   `store/README.md`에 있다.
 - 히어로 이미지는 첫 화면이라 `loading="eager"` + `fetchPriority="high"`, 루프 카드의 커버는
   `loading="lazy"`. 모두 `width`/`height`를 명시해 레이아웃 이동이 없다.
+
+## OG 이미지
+
+공유 미리보기 이미지는 `public/og-image.png`(1200×630, PNG)이고, 모든 페이지가 `og:image`로
+같은 이미지를 가리킨다. 앱 저장소의 Play 피처 그래픽(`store/android/feature-graphic-1024x500.png`)과
+같은 배치에 랜딩 헤드라인을 한국어로 넣은 것이다. 미리보기에서 이미지가 약 1/4로 줄어도 읽히도록
+문구는 볼드로 키웠다.
+
+원본 구성은 [scripts/og-image/](./scripts/og-image/)에 있다. 개발 서버에서만 여는 페이지로, 사이트의
+글꼴과 토큰, `Waveform`의 높이 수열을 그대로 쓴다. 빌드·배포에는 들어가지 않는다. 문구를 바꾸면
+다시 찍는다.
+
+```bash
+pnpm dev   # 기본 포트 5173
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+  --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=10000 \
+  --screenshot=public/og-image.png http://localhost:5173/spot-mixtape-web/scripts/og-image/
+```
+
+카카오톡·페이스북은 미리보기를 오래 캐시한다. 이미지를 바꾼 뒤 예전 미리보기가 계속 보이면 각
+서비스의 공유 디버거(카카오 개발자의 "공유 디버거", Facebook Sharing Debugger)에서 캐시를 지운다.
 
 ## 현황과 잔여 작업
 
@@ -134,16 +155,27 @@ pnpm config:check   # 남아 있는 항목을 파일:줄 번호와 함께 출력
 
 앱 저장소의 `EXPO_PUBLIC_LEGAL_BASE_URL`은 `site.publicOrigin`과 같은 값이어야 한다. 현재 두 값은 일치한다.
 
-### 보안 헤더가 적용되지 않는다
+### 보안 정책은 `<meta>`로 건다
 
-`public/_headers`는 Netlify·Cloudflare Pages 형식이고 **GitHub Pages는 이 파일을 무시한다.** 2026-10-04 라이브 응답 확인 결과 CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`, `Referrer-Policy`가 하나도 나가지 않으며, 파일 자체는 `/_headers`로 그냥 서빙된다. 호스팅 방침은 아직 정하지 않았다.
+GitHub Pages는 응답 헤더를 바꿀 수 없다. 그래서 Content-Security-Policy와 Referrer-Policy를 빌드된
+모든 페이지의 `<meta>`로 넣는다. 정책 문자열은 [scripts/prerender.mjs](./scripts/prerender.mjs)의
+`CONTENT_SECURITY_POLICY` 하나이고, 프리렌더가 각 페이지의 `<meta charset>` 바로 뒤에 넣는다.
+개발 서버는 인라인 스크립트·스타일을 주입하므로 dev 페이지에는 넣지 않는다. 확인하려면
+`pnpm build && pnpm preview`로 띄운다.
 
-헤더를 살리는 호스트로 옮기더라도 `_headers`의 CSP를 그대로 켜면 사이트가 깨진다. 한 번도 적용된 적이 없어 검증되지 않은 설정이다.
-
-- `style-src 'self'`가 [src/components/Waveform.tsx](./src/components/Waveform.tsx)의 인라인 `style` 속성 24건을 차단해 파형 바가 전부 높이 0이 된다.
-- `font-src 'self'`가 Vite가 base64로 인라인한 `data:` 폰트 1건을 차단한다.
-
-배경과 측정 방법은 [docs/architecture.md](./docs/architecture.md)의 알려진 구조 제약에 있다.
+- 정책: `default-src 'self'`, `script-src 'self'`, `style-src 'self'`, `font-src 'self'`,
+  `img-src 'self' data:`(그레인 텍스처), `connect-src 'self'`, `object-src 'none'`, `base-uri 'self'`,
+  `form-action 'none'`.
+- 그래서 **마크업에 `style` 속성을 쓰지 않는다.** 프리렌더된 HTML의 `style` 속성은 막힌다. 클래스·
+  유틸리티·SVG 속성을 쓰고, 런타임 값은 CSSOM(`element.style.setProperty`)으로 넣는다. CSP는
+  CSSOM을 막지 않는다. 인라인 `<script>`도 막힌다.
+- 헤더로만 걸 수 있는 보호는 없다: 클릭재킹 방지(`frame-ancestors`·`X-Frame-Options`),
+  `X-Content-Type-Options`, `Permissions-Policy`, COOP/CORP. 로그인·폼·쿠키가 없는 정적 사이트라
+  수용했다(2026-10-09 OWNER 결정, [docs/work/W-002-main-security-headers.md](./docs/work/W-002-main-security-headers.md)).
+- 캐시도 정할 수 없다. GitHub Pages는 모든 파일에 `max-age=600`을 주고, 10분이 지나면 ETag로
+  다시 확인해 바뀌지 않았으면 304로 답한다.
+- 예전 `public/_headers`(Netlify·Cloudflare 형식)는 GitHub Pages가 무시해 효력이 없어 지웠다.
+  헤더를 지원하는 호스트로 옮기면 git 기록에서 되살린다.
 
 ## 디자인 토큰
 

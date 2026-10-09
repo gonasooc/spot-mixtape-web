@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>spotMixtape OG image source</title>
+    <!-- Dev-only composition for public/og-image.png. Never built or deployed:
+         `vite build` only takes the root index.html. See README "OG 이미지". -->
+    <style>
+      body { margin: 0; }
+      /* The site's film grain is noise; in a PNG it only adds weight. */
+      body::before { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div id="og"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

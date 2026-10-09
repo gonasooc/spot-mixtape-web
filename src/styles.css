@@ -296,8 +296,21 @@
   }
 }
 
+/* Longhands, not the `animation` shorthand: this rule sits outside any
+   cascade layer, so a shorthand here would reset the animation-delay that
+   the enter-delay-* utilities (in Tailwind's utilities layer) set. */
 .enter {
-  animation: enter 620ms var(--ease-emphasized) both;
+  animation-name: enter;
+  animation-duration: 620ms;
+  animation-timing-function: var(--ease-emphasized);
+  animation-fill-mode: both;
+}
+
+/* The hero's stagger, as classes: the CSP blocks style attributes, and an
+   inline animation-delay would silently fall back to 0. `enter-delay-60`
+   starts the element 60ms after the first. */
+@utility enter-delay-* {
+  animation-delay: calc(--value(integer) * 1ms);
 }
 
 /* Recording bars: mirrors the candle-style waveform used on sound cards. */
@@ -315,6 +328,16 @@
   transform-origin: center;
   animation: bar-pulse 1.9s ease-in-out infinite;
 }
+
+/* An eight-bar ripple, 110ms apart. Rules rather than per-bar inline styles,
+   which the CSP would block. */
+.bar-pulse:nth-child(8n + 2) { animation-delay: 110ms; }
+.bar-pulse:nth-child(8n + 3) { animation-delay: 220ms; }
+.bar-pulse:nth-child(8n + 4) { animation-delay: 330ms; }
+.bar-pulse:nth-child(8n + 5) { animation-delay: 440ms; }
+.bar-pulse:nth-child(8n + 6) { animation-delay: 550ms; }
+.bar-pulse:nth-child(8n + 7) { animation-delay: 660ms; }
+.bar-pulse:nth-child(8n + 8) { animation-delay: 770ms; }
 
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -45,6 +45,7 @@
 - **플레이스홀더가 남아 있으면 색인되지 않습니다.** `src/routes.ts`가 `findUnresolvedConfigKeys()`를 보고 전 페이지를 `noindex`로 돌리고 `robots.txt`를 `Disallow: /`로 씁니다. 값이 모두 채워지면 스스로 색인을 다시 켭니다.
 - **변호사 검토는 생략하기로 결정했습니다.** 앱 저장소 `docs/RELEASE_RUNBOOK.md` 2.1에 2026-09-05 OWNER 결정으로 기록돼 있습니다. 이미 검토된 문안을 바탕으로 무료 앱에 맞게 불필요한 조항을 걷어낸 형태로 확정했습니다. 검토를 받게 될 경우의 출발점은 아래 ‘법률 문서의 알려진 보완 후보’입니다.
 - **저장소 이름을 바꾸면 공개 URL이 전부 깨집니다.** GitHub Pages project page 경로가 `site.publicOrigin`에 들어 있습니다. 스토어와 방침에 제출한 뒤에는 이름을 바꾸지 않습니다.
+- **보안 정책은 GitHub Pages에 남아 meta CSP로 겁니다.** 이 호스트는 응답 헤더를 지원하지 않습니다. 헤더를 지원하는 호스트로 옮기면 스토어 콘솔·OAuth 동의 화면·앱 EAS 환경변수에 등록된 공개 URL을 전부 바꿔야 해서, 대신 CSP와 Referrer-Policy를 `<meta>`로 걸기로 2026-10-09 OWNER가 결정했습니다. 헤더 전용 보호(클릭재킹 방지 등)는 포기했습니다 — 로그인·폼·쿠키가 없는 정적 사이트라 위험이 낮습니다. 근거: [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md).
 
 ## 법률 문서의 알려진 보완 후보
 
@@ -71,7 +72,6 @@
 
 ## 아직 결정할 사항
 
-- 보안 응답 헤더를 어떻게 할지. 현재 호스트(GitHub Pages)는 `public/_headers`를 무시하므로 헤더가 하나도 나가지 않습니다. 현 상태 수용 / 다른 호스트로 이전 / 커스텀 도메인 + 프록시 중 선택이 필요합니다. 근거는 [docs/architecture.md](architecture.md)의 알려진 구조 제약, 진행은 [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md)에 있습니다.
 - 우편 주소 없이 이메일 연락처만 공개하는 것으로 충분한지. `site.postalAddress`는 현재 `null`이고, 앱 저장소 runbook에서도 미확인 상태입니다.
 - 커스텀 도메인을 쓸지. 현재는 `github.io` 하위 경로를 사용합니다. 도메인을 붙이면 `site.publicOrigin` 하나만 바꾸면 되지만, 스토어 콘솔에 제출한 URL도 함께 옮겨야 합니다.
 - 린터를 도입할지. ESLint·Prettier가 없습니다. 앱 저장소와 규칙을 맞출지 정해야 합니다.

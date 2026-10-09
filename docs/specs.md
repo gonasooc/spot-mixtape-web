@@ -25,7 +25,8 @@
 - **선택적으로 비울 수 있는 값은 `null`로 둔다.** `postalAddress`가 그렇다. 페이지 쪽에서 조건부로 렌더해 문장과 표 행이 함께 빠지게 한다. 빈 문자열을 쓰지 않는다.
 - **`pnpm preview`는 SPA history fallback 없이(`appType: "mpa"`) 돈다.** 프로덕션과 같은 정적 호스트 동작을 재현하기 위해서이며, fallback을 켜면 깨진 URL과 404가 가려진다. 이 설정을 바꾸지 않는다.
 - **색·크기는 `src/styles.css`의 `@theme`에서만 온다.** 컴포넌트에 임의 색값이나 임의 크기를 쓰지 않으며, 한 이름을 색과 글자 크기 네임스페이스에 겹쳐 두지 않는다. `pnpm tokens:check`가 후자를 빌드 전에 잡는다. 근거는 [docs/design.md](design.md).
-- **인라인 `style` 속성과 `data:` URI 자산은 CSP와 충돌한다.** 현재 호스트에서는 CSP가 적용되지 않아 드러나지 않지만, 헤더를 살리는 호스트로 옮기면 바로 깨진다. 새 코드에서 인라인 style을 늘리지 않는다. 자세한 내용은 [docs/architecture.md](architecture.md)의 알려진 구조 제약을 본다.
+- **마크업에 `style` 속성을 쓰지 않는다.** 빌드된 페이지는 meta CSP(`style-src 'self'`)를 달고 있어 프리렌더된 HTML의 `style` 속성이 막힌다. 클래스·유틸리티(예: 히어로 지연의 `enter-delay-*`)·SVG 표현 속성(예: 파형 막대의 `height`)을 쓰고, 런타임 값은 CSSOM(`element.style.setProperty`)으로 넣는다 — CSP는 CSSOM을 막지 않는다. 인라인 `<script>`와 `eval`, `data:` 글꼴도 막힌다. 정책의 위치와 범위는 [docs/architecture.md](architecture.md)를 본다.
+- **레이어 밖 CSS에서 `animation` 단축 속성을 쓰지 않는다.** `src/styles.css`의 일반 규칙은 Tailwind의 `utilities` 레이어보다 우선하므로, 단축 속성이 유틸리티가 준 `animation-delay`를 0으로 덮는다. `.enter`가 개별 속성으로 쓰인 이유다.
 - **이미지는 `src/assets/`에서 import한다.** `public/`에 두면 하위 경로와 해시 캐시를 직접 챙겨야 한다. 사진류는 WebP로 줄여 넣고(`cwebp -q 82`), `loading="lazy"`와 명시적 `width`/`height`를 함께 쓴다. 스토어 스크린샷의 정본과 갱신 절차는 [README.md](../README.md)의 "앱 스크린샷"에 있다.
 - **한국어 본문은 `word-break: keep-all`을 전제로 작성한다.** 어절 중간에서 줄바꿈되지 않으며, 이메일·URL처럼 끊을 수 없는 토큰만 `overflow-wrap: break-word`로 처리한다.
 - **커밋 메시지에 도구 귀속 줄(`Co-Authored-By` 등)을 붙이지 않는다.**
@@ -46,6 +47,7 @@
 
 - `pnpm build`가 `⚠️ placeholder` 경고 없이 끝나고 `prerender: wrote 8 pages + sitemap.xml + robots.txt`를 출력한다.
 - UI를 바꿨다면 [docs/design.md](design.md)의 디자인 확인 방법을 따른다.
+- 빌드 결과를 `pnpm preview`로 띄워 콘솔에 CSP 위반이 0건인지 본다. 개발 서버에는 정책이 없어서 `pnpm dev`로는 드러나지 않는다.
 
 ### 배포 후 확인
 
@@ -63,8 +65,12 @@ curl -s -o /dev/null -w "%{http_code}\n" "$ORIGIN/nope"
 # sitemap·robots의 origin이 실제 값인지
 curl -s "$ORIGIN/sitemap.xml" "$ORIGIN/robots.txt"
 
-# 보안 헤더 — 현재 호스트에서는 아무것도 나오지 않는 것이 정상이다
-curl -sI "$ORIGIN/privacy" | grep -i "content-security-policy\|x-frame-options\|permissions-policy"
+# 공유 이미지가 200이고 메타가 절대 URL로 가리키는지
+curl -s -o /dev/null -w "%{http_code} og-image.png\n" "$ORIGIN/og-image.png"
+curl -s "$ORIGIN/" | grep -o '<meta property="og:image" content="[^"]*"'
+
+# 보안 정책 — 헤더가 아니라 HTML의 <meta>로 나온다
+curl -s "$ORIGIN/privacy" | grep -o '<meta http-equiv="Content-Security-Policy"[^>]*>'
 ```
 
 사람이 직접 확인해야 하는 것은 [docs/work/W-003-main-manual-verification.md](work/W-003-main-manual-verification.md)에서 관리한다.

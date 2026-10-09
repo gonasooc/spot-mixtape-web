@@ -21,7 +21,42 @@ const SSR_DIST = resolve(ROOT, "dist-ssr");
 const { findUnresolvedConfigKeys, render, routes, site, withBasePath } =
   await import(pathToFileURL(resolve(SSR_DIST, "entry-server.js")).href);
 
-const template = readFileSync(resolve(DIST, "index.html"), "utf8");
+/**
+ * The site's Content-Security-Policy. GitHub Pages cannot send response
+ * headers, so the policy travels as a <meta> element in every built page,
+ * right after the charset so it governs every resource that follows. Two
+ * directives a header policy would carry are left out: frame-ancestors is
+ * ignored when delivered by <meta>, and upgrade-insecure-requests adds nothing
+ * on an https-only host while it would break `vite preview` over plain http.
+ * The dev server injects inline scripts and styles this policy forbids, so
+ * only built pages carry it.
+ */
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "form-action 'none'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "object-src 'none'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "connect-src 'self'",
+].join("; ");
+
+const SECURITY_META = [
+  `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}" />`,
+  `<meta name="referrer" content="strict-origin-when-cross-origin" />`,
+];
+
+const CHARSET_META = '<meta charset="utf-8" />';
+const builtIndex = readFileSync(resolve(DIST, "index.html"), "utf8");
+if (!builtIndex.includes(CHARSET_META)) {
+  throw new Error(`index.html no longer contains ${CHARSET_META}; the CSP has no anchor`);
+}
+const template = builtIndex.replace(
+  CHARSET_META,
+  [CHARSET_META, ...SECURITY_META].join("\n    "),
+);
 
 function escapeAttribute(value) {
   return value
@@ -30,6 +65,9 @@ function escapeAttribute(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+
+const OG_IMAGE_ALT =
+  "spotMixtape — 레코드 마크와 함께 '그때 그곳의 소리를 다시 꺼내 듣습니다' 문구와 파형";
 
 function buildHead(meta) {
   const canonical = `${site.publicOrigin}${meta.path === "/404" ? "/" : meta.path}`;
@@ -44,7 +82,13 @@ function buildHead(meta) {
     `<meta property="og:title" content="${escapeAttribute(meta.title)}" />`,
     `<meta property="og:description" content="${escapeAttribute(meta.description)}" />`,
     `<meta property="og:url" content="${escapeAttribute(canonical)}" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    // One share image for every page: public/og-image.png, composed by
+    // scripts/og-image/ (see README). Crawlers need an absolute URL.
+    `<meta property="og:image" content="${escapeAttribute(`${site.publicOrigin}/og-image.png`)}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="${escapeAttribute(OG_IMAGE_ALT)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
   ].join("\n    ");
 }
 
@@ -108,6 +152,7 @@ for (const redirect of REDIRECTS) {
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    ${SECURITY_META.join("\n    ")}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="refresh" content="0;url=${target}" />
     <meta name="robots" content="noindex,follow" />

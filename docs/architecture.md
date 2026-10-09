@@ -9,13 +9,14 @@
 | `src/config/site.ts` | 법적으로 의미 있는 모든 값의 단일 출처. 상호, 스토어 표기명, 보호책임자, 지원 이메일, 공개 origin, 시행일, 보관 기간, 스토어 URL. `findUnresolvedConfigKeys()`로 미교체 플레이스홀더를 노출한다 |
 | `src/basePath.ts` | `site.publicOrigin`의 경로에서 배포 서브패스를 끌어낸다. Vite asset base, 라우터 basename, 리다이렉트 스텁 목적지가 모두 여기서 나온다 |
 | `src/routes.ts` | 라우트별 메타데이터(제목, 설명, theme-color, 색인 여부)와 경로→메타 조회. 플레이스홀더가 남아 있으면 전 라우트의 `indexable`을 끈다 |
-| `scripts/prerender.mjs` | SSR 번들로 각 라우트를 정적 HTML로 출력하고, 리다이렉트 스텁·`sitemap.xml`·`robots.txt`를 생성한 뒤 `dist-ssr/`을 지운다 |
+| `scripts/prerender.mjs` | SSR 번들로 각 라우트를 정적 HTML로 출력하고, 리다이렉트 스텁·`sitemap.xml`·`robots.txt`를 생성한 뒤 `dist-ssr/`을 지운다. 사이트의 CSP와 Referrer-Policy를 모든 페이지에 `<meta>`로 넣는다 |
 | `scripts/check-config.mjs` | 플레이스홀더 검출기. 남아 있으면 파일:줄과 함께 출력하고 exit 1 |
 | `scripts/check-tokens.mjs` | `@theme`의 한 이름이 두 네임스페이스를 차지해 유틸리티가 조용히 사라지는 것을 막는다. 빌드의 첫 단계 |
+| `scripts/og-image/` | 공유 이미지 `public/og-image.png`의 원본 구성. 개발 서버에서만 여는 페이지라 빌드·배포에 들어가지 않는다 |
 | `src/entry-server.tsx` | 프리렌더용 진입점. `StaticRouter`로 한 경로를 문자열로 렌더하고, 프리렌더 스크립트가 쓸 값들을 재수출한다 |
 | `src/entry-client.tsx` | 브라우저 진입점. 프로덕션에서는 프리렌더된 마크업을 hydrate하고, 개발 서버에서는 빈 루트에 새로 마운트한다 |
 | `.github/workflows/deploy.yml` | main push와 수동 실행으로 GitHub Pages에 배포. `config:check`와 필수 페이지 존재 검사를 통과해야 올라간다 |
-| 외부: GitHub Pages | 정적 호스팅. 커스텀 응답 헤더를 지원하지 않는다 |
+| 외부: GitHub Pages | 정적 호스팅. 응답 헤더를 바꿀 수 없어 보안 정책은 `<meta>`로 건다. 모든 파일이 `max-age=600` |
 | 외부: `spot-mixtape` 앱 저장소 | `EXPO_PUBLIC_LEGAL_BASE_URL`에 이 사이트의 origin을 넣고 `.html` 경로를 이어 붙여 앱 내 링크를 만든다 |
 
 ## 주요 폴더와 흐름
@@ -55,12 +56,12 @@ src/
 
   앱의 `getLegalPageUrl()`은 base URL을 검증한다. HTTPS여야 하고, 인증정보·쿼리·프래그먼트가 없어야 하며, `.html`로 끝나거나 `localhost`·`.test`·`example.com` 호스트면 거절한다. 하위 경로는 받고 끝 슬래시 유무는 정규화한다.
 - **법률 문서의 장을 추가·삭제하면 목차 번호를 함께 맞춘다.** `src/pages/Privacy.tsx`의 `SECTIONS` 배열과 각 `PolicySection`의 `index`가 따로 있어, 한쪽만 고치면 목차와 본문 번호가 어긋난다.
+- **보안 정책은 `scripts/prerender.mjs`의 `CONTENT_SECURITY_POLICY` 하나에서 나온다.** 프리렌더가 리다이렉트 스텁을 포함한 모든 페이지의 `<meta charset>` 바로 뒤에 넣는다 — meta 정책은 그 뒤에 오는 리소스에만 적용된다. 빌드된 `index.html`에서 `<meta charset="utf-8" />`를 못 찾으면 빌드를 실패시킨다. 개발 서버는 인라인 스크립트·스타일을 주입하므로 dev 페이지에는 넣지 않는다. 헤더 정책이면 넣었을 `frame-ancestors`는 meta에서 무시되고, `upgrade-insecure-requests`는 https 전용 호스트에서 얻는 게 없는데 http로 띄우는 `vite preview`를 깨뜨려서 둘 다 뺐다.
 - **색인 여부는 `routes.ts`가 단독으로 판단한다.** 개별 페이지에서 robots 메타를 따로 쓰지 않는다. 프리렌더와 `useDocumentMeta`가 같은 값을 쓴다.
 
 ## 알려진 구조 제약
 
-- **GitHub Pages는 커스텀 응답 헤더를 지원하지 않는다.** `public/_headers`는 Netlify·Cloudflare Pages 형식이라 현재 호스트에서 완전히 무시된다. 2026-10-04 라이브 응답 확인 결과 CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`, `Referrer-Policy`가 하나도 나가지 않는다. 파일 자체는 `/_headers`로 그냥 서빙된다.
-- **`_headers`의 CSP는 지금 켜면 사이트를 깨뜨린다.** 한 번도 적용된 적이 없어 검증되지 않았다. 2026-10-04 dist를 그 헤더 그대로 로컬에 띄워 확인한 결과, `style-src 'self'`가 인라인 `style` 속성을 차단한다(프리렌더된 랜딩에 27건 — 파형 막대 높이, 히어로 `animation-delay`, `Reveal` 전환값). `font-src 'self'`에 걸리던 `data:` 폰트는 2026-10-04 `build.assetsInlineLimit: 0`으로 없앴다. 헤더를 살리는 호스트로 옮기기 전에 CSP나 구현을 먼저 고쳐야 한다. 근거는 [docs/work/W-001-main-docs-structure.md](work/W-001-main-docs-structure.md)에 있다.
+- **GitHub Pages는 응답 헤더를 지원하지 않는다.** 그래서 CSP와 Referrer-Policy는 `<meta>`로 걸고(2026-10-09 OWNER 결정), 헤더 전용인 클릭재킹 방지(`frame-ancestors`·`X-Frame-Options`)·`X-Content-Type-Options`·`Permissions-Policy`·COOP/CORP는 없다. 캐시도 정할 수 없어 해시가 붙은 `/assets/` 파일까지 모두 `max-age=600`이고, 만료 뒤에는 ETag로 재확인해 304를 받는다. 예전 `public/_headers`는 이 호스트에서 효력이 없어 지웠다. 근거는 [docs/work/W-002-main-security-headers.md](work/W-002-main-security-headers.md).
 - **공개 origin이 도메인 루트가 아니라 하위 경로다.** `https://gonasooc.github.io/spot-mixtape-web`. 앱의 `getLegalPageUrl()`은 하위 경로를 받도록 이미 수정돼 있지만(끝 슬래시는 정규화, `.html`로 끝나면 거절), 루트 배포를 가정한 코드나 문서가 남아 있으면 어긋난다.
 - **저장소 이름이 공개 URL의 일부다.** 이름을 바꾸면 스토어와 방침에 제출한 URL이 전부 깨진다.
 - **배포 워크플로는 main push 전용이다.** PR 시점에 `config:check`나 빌드를 돌리는 워크플로는 없다.
